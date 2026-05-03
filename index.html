@@ -1,0 +1,3347 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FunAgency MiniApp — Telegram Web App Mockup</title>
+<style>
+  :root {
+    --tg-bg: #17212b;
+    --tg-bg-secondary: #232e3c;
+    --tg-bg-tertiary: #2a3748;
+    --tg-text: #ffffff;
+    --tg-text-secondary: #aab8c2;
+    --tg-text-hint: #6d7f93;
+    --tg-link: #62b1eb;
+    --tg-button: #62b1eb;
+    --tg-button-text: #ffffff;
+    --tg-destructive: #ff595a;
+    --brand-orange: #f97316;
+    --brand-orange-dark: #ea580c;
+    --success: #4caf50;
+    --warning: #ff9800;
+    --border: #3a4757;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *::-webkit-scrollbar { width: 4px; height: 4px; }
+  *::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+  body {
+    background: linear-gradient(135deg, #0f1923 0%, #1a2533 50%, #0e1620 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    padding: 24px;
+    color: white;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+  }
+
+  .header h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #62b1eb 0%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header .subtitle { color: var(--tg-text-secondary); font-size: 14px; margin-bottom: 16px; }
+
+  .lang-toggle {
+    display: inline-flex;
+    background: rgba(255,255,255,0.08);
+    padding: 4px;
+    border-radius: 24px;
+    margin-bottom: 12px;
+  }
+
+  .lang-btn {
+    padding: 6px 16px; background: transparent; border: none;
+    color: white; border-radius: 20px; cursor: pointer; font-size: 13px;
+    transition: all 0.2s;
+  }
+  .lang-btn.active { background: var(--brand-orange); }
+
+  .scenario-tabs { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+
+  .tab {
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white; border-radius: 20px; cursor: pointer;
+    font-size: 12px; transition: all 0.2s; white-space: nowrap;
+  }
+  .tab:hover { background: rgba(255,255,255,0.15); }
+  .tab.active {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    border-color: var(--brand-orange);
+    box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+  }
+
+  .container {
+    max-width: 1500px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 400px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  @media (max-width: 1200px) { .container { grid-template-columns: 1fr; } }
+
+  .left-panel, .right-panel {
+    padding: 20px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    max-height: 800px;
+    overflow-y: auto;
+  }
+
+  .panel-title {
+    font-size: 14px; color: var(--brand-orange); margin-bottom: 16px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  .design-note {
+    margin-bottom: 14px; padding: 12px;
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid var(--brand-orange);
+    border-radius: 6px; font-size: 12px; line-height: 1.5;
+  }
+  .design-note .label {
+    font-weight: 700; color: var(--brand-orange);
+    margin-bottom: 4px; display: block; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .design-note .why { color: var(--tg-text-secondary); }
+
+  /* === PHONE MOCKUP === */
+  .phone-wrap { display: flex; flex-direction: column; align-items: center; }
+
+  .phone {
+    width: 380px;
+    background: #000;
+    border-radius: 36px;
+    padding: 10px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,255,255,0.05);
+    position: relative;
+  }
+  .phone::before {
+    content: ""; position: absolute;
+    top: 18px; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 24px;
+    background: #000; border-radius: 12px; z-index: 10;
+  }
+
+  .screen {
+    background: var(--tg-bg);
+    border-radius: 28px;
+    overflow: hidden;
+    height: 760px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* === TG TOP BAR (MiniApp style) === */
+  .tg-bar {
+    padding: 50px 16px 12px;
+    background: var(--tg-bg);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+    flex-shrink: 0;
+  }
+  .tg-bar .back { color: var(--tg-link); font-size: 14px; cursor: pointer; }
+  .tg-bar .title { flex: 1; text-align: center; font-weight: 600; font-size: 16px; }
+  .tg-bar .close { color: var(--tg-text-secondary); font-size: 18px; cursor: pointer; }
+
+  /* === CONTENT AREA === */
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    background: var(--tg-bg);
+  }
+
+  /* === BOTTOM NAV === */
+  .bottom-nav {
+    background: var(--tg-bg-secondary);
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 8px 0 12px;
+    flex-shrink: 0;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 2px; padding: 6px 4px;
+    color: var(--tg-text-hint);
+    cursor: pointer; transition: color 0.2s;
+  }
+  .nav-item.active { color: var(--brand-orange); }
+  .nav-item .icon { font-size: 20px; line-height: 1; }
+  .nav-item .label { font-size: 10px; font-weight: 500; }
+
+  /* === MAIN BUTTON (TG style) === */
+  .main-button {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: white; padding: 14px;
+    border-radius: 12px; font-weight: 700;
+    text-align: center; cursor: pointer;
+    border: none; width: 100%; font-size: 15px;
+    box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+  }
+
+  .secondary-button {
+    background: var(--tg-bg-tertiary); color: white;
+    padding: 12px; border-radius: 10px; font-weight: 600;
+    text-align: center; cursor: pointer;
+    border: none; width: 100%; font-size: 14px;
+  }
+
+  /* === HEADER ICONS (Settings/Help) === */
+  .tg-bar-icons { display: flex; gap: 4px; align-items: center; }
+  .tg-icon-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 14px;
+    transition: background 0.2s;
+  }
+  .tg-icon-btn:hover { background: rgba(255,255,255,0.1); }
+
+  /* === SETTINGS / HELP MODAL === */
+  .modal-overlay {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--tg-bg);
+    z-index: 110; display: none;
+    flex-direction: column;
+    padding: 50px 0 0;
+  }
+  .modal-overlay.show { display: flex; animation: slideUp 0.3s; }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+  }
+  .modal-title { font-weight: 600; font-size: 16px; }
+  .modal-close { color: var(--tg-link); cursor: pointer; font-size: 14px; }
+  .modal-body {
+    flex: 1; overflow-y: auto; padding: 16px;
+  }
+
+  /* === SETTINGS LIST === */
+  .settings-section { margin-bottom: 18px; }
+  .settings-label {
+    font-size: 11px; color: var(--tg-text-hint);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 6px; padding: 0 4px;
+  }
+  .settings-row {
+    background: var(--tg-bg-secondary);
+    padding: 12px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+  }
+  .settings-row:first-child { border-radius: 10px 10px 0 0; }
+  .settings-row:last-child { border-radius: 0 0 10px 10px; border-bottom: 0; }
+  .settings-row:only-child { border-radius: 10px; }
+  .settings-row:hover { background: var(--tg-bg-tertiary); }
+  .settings-row-label { font-size: 13px; }
+  .settings-row-value { font-size: 12px; color: var(--tg-text-secondary); display: flex; align-items: center; gap: 6px; }
+  .settings-row-value .arrow { color: var(--tg-text-hint); }
+
+  /* === TOGGLE SWITCH === */
+  .toggle {
+    width: 36px; height: 20px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px; position: relative;
+    transition: background 0.2s; cursor: pointer;
+  }
+  .toggle::after {
+    content: ''; position: absolute;
+    width: 16px; height: 16px;
+    background: white; border-radius: 50%;
+    top: 2px; left: 2px;
+    transition: left 0.2s;
+  }
+  .toggle.on { background: var(--brand-orange); }
+  .toggle.on::after { left: 18px; }
+
+  /* === FAQ ACCORDION === */
+  .faq-item {
+    background: var(--tg-bg-secondary);
+    border-radius: 10px; margin-bottom: 6px;
+    overflow: hidden;
+  }
+  .faq-question {
+    padding: 12px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; font-size: 13px; font-weight: 600;
+  }
+  .faq-question .arrow { color: var(--brand-orange); transition: transform 0.2s; }
+  .faq-item.open .faq-question .arrow { transform: rotate(180deg); }
+  .faq-answer {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.3s ease;
+    padding: 0 14px;
+  }
+  .faq-item.open .faq-answer {
+    max-height: 300px;
+    padding: 0 14px 12px;
+  }
+  .faq-answer-content { font-size: 12px; color: var(--tg-text-secondary); line-height: 1.5; }
+
+  /* === BOOST INFO POPOVER === */
+  .boost-info-trigger { cursor: pointer; opacity: 0.7; }
+  .boost-info-trigger:hover { opacity: 1; }
+
+  /* === WALLET FILTER CHIPS === */
+  .filter-chips { display: flex; gap: 6px; margin-bottom: 10px; overflow-x: auto; }
+  .filter-chip {
+    padding: 6px 12px; border-radius: 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 11px; color: var(--tg-text-secondary);
+    cursor: pointer; white-space: nowrap; transition: all 0.2s;
+  }
+  .filter-chip.active { background: var(--brand-orange); color: white; border-color: var(--brand-orange); }
+  .filter-chip:hover { background: rgba(255,255,255,0.1); }
+
+  /* === WALLET YTD STATS === */
+  .ytd-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .ytd-card {
+    background: var(--tg-bg-secondary);
+    border-radius: 10px; padding: 10px 12px;
+  }
+  .ytd-label { font-size: 10px; color: var(--tg-text-hint); text-transform: uppercase; letter-spacing: 0.5px; }
+  .ytd-value { font-size: 18px; font-weight: 800; font-family: monospace; margin-top: 2px; }
+  .ytd-trend { font-size: 10px; margin-top: 1px; }
+  .ytd-trend.up { color: var(--success); }
+  .ytd-trend.down { color: var(--tg-destructive); }
+
+  /* === EXPORT BUTTON === */
+  .export-row { display: flex; gap: 6px; margin-bottom: 12px; }
+  .export-btn {
+    flex: 1; padding: 8px; border-radius: 8px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    color: var(--tg-link); font-size: 11px; font-weight: 600;
+    cursor: pointer; transition: background 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .export-btn:hover { background: rgba(98,177,235,0.1); border-color: var(--tg-link); }
+
+  /* === WITHDRAW HISTORY === */
+  .withdraw-history-card {
+    background: var(--tg-bg-secondary);
+    border-radius: 10px; padding: 10px 12px;
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .wh-icon {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(76,175,80,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .wh-icon.pending { background: rgba(255,152,0,0.15); }
+  .wh-info { flex: 1; }
+  .wh-amount { font-family: monospace; font-size: 13px; font-weight: 700; }
+  .wh-meta { font-size: 10px; color: var(--tg-text-secondary); margin-top: 1px; }
+  .wh-status {
+    font-size: 10px; padding: 2px 6px; border-radius: 4px;
+    font-weight: 600;
+  }
+  .wh-status.done { background: rgba(76,175,80,0.2); color: var(--success); }
+  .wh-status.pending { background: rgba(255,152,0,0.2); color: var(--warning); }
+
+  /* === TEMPLATE CARDS (Share) === */
+  .template-card {
+    background: var(--tg-bg-secondary);
+    border-radius: 10px; padding: 12px;
+    margin-bottom: 6px; cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .template-card:hover {
+    background: var(--tg-bg-tertiary);
+    border-color: rgba(249,115,22,0.3);
+  }
+  .template-tag {
+    display: inline-block; padding: 2px 6px; border-radius: 6px;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .template-tag.casual { background: rgba(98,177,235,0.2); color: var(--tg-link); }
+  .template-tag.numbers { background: rgba(76,175,80,0.2); color: var(--success); }
+  .template-tag.story { background: rgba(245,166,35,0.2); color: #f5a623; }
+  .template-tag.compare { background: rgba(249,115,22,0.2); color: var(--brand-orange); }
+  .template-tag.urgency { background: rgba(255,87,34,0.2); color: #ff5722; }
+  .template-tag.question { background: rgba(170,184,194,0.2); color: var(--tg-text-secondary); }
+  .template-tag.authority { background: rgba(138,43,226,0.2); color: #ba68c8; }
+  .template-text {
+    font-size: 12px; color: var(--tg-text-secondary);
+    line-height: 1.45; margin-top: 4px;
+  }
+  .template-actions {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 8px; padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .template-uses { font-size: 10px; color: var(--tg-text-hint); }
+  .template-copy {
+    background: rgba(249,115,22,0.15); color: var(--brand-orange);
+    border: none; padding: 4px 10px; border-radius: 6px;
+    font-size: 10px; font-weight: 700; cursor: pointer;
+  }
+
+  /* === SQUAD SYSTEM === */
+  .squad-card { background: linear-gradient(135deg, rgba(98,177,235,0.15) 0%, rgba(58,110,160,0.05) 100%); border: 1px solid rgba(98,177,235,0.3); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+  .squad-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .squad-title { font-size: 11px; color: var(--tg-link); font-weight: 700; letter-spacing: 1px; }
+  .squad-members { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .squad-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #62b1eb, #3a6ea0); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: white; border: 2px solid var(--tg-bg-secondary); }
+  .squad-avatar.empty { background: rgba(255,255,255,0.05); color: var(--tg-text-hint); border: 2px dashed rgba(255,255,255,0.15); }
+  .squad-avatar.leader { background: linear-gradient(135deg, #f97316, #ea580c); border-color: var(--brand-orange); }
+  .squad-bonus { font-size: 11px; color: var(--success); font-weight: 700; margin-top: 8px; }
+
+  /* === MONTHLY PRIZE POOL === */
+  .prize-pool { background: linear-gradient(135deg, rgba(255,215,0,0.12) 0%, rgba(255,87,34,0.05) 100%); border: 1px solid rgba(255,215,0,0.4); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+  .prize-row { display: flex; justify-content: space-between; align-items: center; }
+  .prize-pool-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #ffd700; }
+  .prize-countdown { font-size: 10px; color: var(--tg-text-secondary); }
+  .prize-rankings { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+  .prize-rank-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: rgba(0,0,0,0.2); border-radius: 8px; }
+  .prize-rank-row.you { border: 1px solid var(--brand-orange); background: rgba(249,115,22,0.12); }
+  .prize-medal { font-size: 14px; flex-shrink: 0; width: 22px; text-align: center; }
+  .prize-name { flex: 1; font-size: 12px; font-weight: 600; }
+  .prize-amount { font-family: monospace; font-size: 12px; font-weight: 700; color: #ffd700; }
+
+  /* === TIER UPGRADE CEREMONY === */
+  .ceremony-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle, rgba(249,115,22,0.4) 0%, rgba(0,0,0,0.95) 70%); z-index: 150; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+  .ceremony-overlay.show { display: flex; animation: fadeIn 0.3s; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .ceremony-trophy { font-size: 72px; margin-bottom: 16px; animation: trophyBounce 0.8s ease-out; }
+  @keyframes trophyBounce { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 50% { transform: scale(1.3) rotate(20deg); } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+  .ceremony-title { font-size: 28px; font-weight: 900; margin-bottom: 8px; background: linear-gradient(135deg, #ffd700, #f97316); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: titleGlow 1.5s infinite alternate; }
+  @keyframes titleGlow { from { filter: brightness(1); } to { filter: brightness(1.5); } }
+  .ceremony-subtitle { font-size: 13px; color: white; margin-bottom: 20px; max-width: 280px; line-height: 1.5; }
+  .ceremony-perks { background: rgba(0,0,0,0.5); border-radius: 12px; padding: 12px 14px; margin-bottom: 18px; max-width: 300px; width: 100%; border: 1px solid rgba(249,115,22,0.4); }
+  .ceremony-perk { font-size: 12px; color: white; padding: 3px 0; text-align: left; }
+
+  /* === PUSH NOTIFICATION BANNER === */
+  .push-notif { position: absolute; top: 60px; left: 8px; right: 8px; background: linear-gradient(135deg, rgba(98,177,235,0.95), rgba(58,110,160,0.95)); backdrop-filter: blur(10px); color: white; padding: 10px 12px; border-radius: 10px; z-index: 130; box-shadow: 0 4px 20px rgba(0,0,0,0.4); display: none; align-items: center; gap: 10px; }
+  .push-notif.show { display: flex; animation: pushSlideDown 0.5s ease-out; }
+  @keyframes pushSlideDown { from { transform: translateY(-200%); } to { transform: translateY(0); } }
+  .push-icon { font-size: 18px; flex-shrink: 0; }
+  .push-content { flex: 1; }
+  .push-title { font-size: 10px; font-weight: 700; opacity: 0.9; letter-spacing: 0.5px; }
+  .push-text { font-size: 12px; line-height: 1.3; margin-top: 1px; }
+  .push-close { font-size: 14px; cursor: pointer; opacity: 0.7; }
+
+  /* === DAILY STREAK === */
+  .streak-card {
+    background: linear-gradient(135deg, rgba(255,87,34,0.15) 0%, rgba(244,67,54,0.05) 100%);
+    border: 1px solid rgba(255,152,0,0.3);
+    border-radius: 12px; padding: 12px; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .streak-fire { font-size: 28px; animation: flicker 1.5s infinite; }
+  @keyframes flicker { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+  .streak-info { flex: 1; }
+  .streak-count { font-weight: 700; font-size: 14px; color: #ff9800; }
+  .streak-sub { font-size: 11px; color: var(--tg-text-secondary); margin-top: 1px; }
+
+  /* === ACTIVITY FEED === */
+  .activity-section { background: var(--tg-bg-secondary); border-radius: 12px; padding: 12px; margin-bottom: 16px; }
+  .activity-section .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #4caf50; margin-right: 4px; animation: livePulse 2s infinite; }
+  @keyframes livePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .activity-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+  .activity-row:first-of-type { border-top: 0; }
+  .activity-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .activity-text { flex: 1; font-size: 12px; line-height: 1.3; }
+  .activity-amount { font-family: monospace; font-size: 12px; font-weight: 700; color: var(--success); }
+  .activity-time { font-size: 10px; color: var(--tg-text-hint); margin-left: 4px; }
+
+  /* === ACHIEVEMENT BADGES === */
+  .achievements { background: var(--tg-bg-secondary); border-radius: 12px; padding: 14px; margin-bottom: 16px; }
+  .badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .badge { aspect-ratio: 1; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px; text-align: center; transition: transform 0.2s; }
+  .badge:hover { transform: scale(1.05); }
+  .badge.unlocked { background: linear-gradient(135deg, rgba(249,115,22,0.2), rgba(234,88,12,0.05)); border: 1px solid rgba(249,115,22,0.4); }
+  .badge.locked { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); opacity: 0.4; }
+  .badge-emoji { font-size: 22px; line-height: 1; margin-bottom: 4px; }
+  .badge-label { font-size: 9px; font-weight: 600; line-height: 1.1; }
+  .badge.locked .badge-emoji { filter: grayscale(1); }
+
+  /* === NATIVE TG SHARE === */
+  .tg-share-btn { background: linear-gradient(135deg, #62b1eb 0%, #3a6ea0 100%); color: white; padding: 12px; border-radius: 10px; font-weight: 600; font-size: 14px; text-align: center; cursor: pointer; border: none; width: 100%; box-shadow: 0 4px 16px rgba(98, 177, 235, 0.3); margin-top: 8px; }
+  .tg-share-btn:hover { transform: translateY(-1px); }
+
+  /* === STORY ONBOARDING (DOGS pattern) === */
+  .story-overlay {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--tg-bg); z-index: 100;
+    display: none; flex-direction: column;
+    padding: 50px 24px 24px;
+  }
+  .story-overlay.show { display: flex; }
+  .story-progress { display: flex; gap: 4px; margin-bottom: 24px; }
+  .story-progress span {
+    flex: 1; height: 3px; border-radius: 2px;
+    background: rgba(255,255,255,0.2);
+  }
+  .story-progress span.active { background: var(--brand-orange); }
+  .story-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .story-emoji { font-size: 80px; margin-bottom: 24px; animation: bounce 1s infinite alternate; }
+  @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+  .story-title { font-size: 24px; font-weight: 800; margin-bottom: 12px; }
+  .story-text { font-size: 14px; color: var(--tg-text-secondary); line-height: 1.5; max-width: 280px; }
+  .story-actions { display: flex; gap: 8px; }
+  .story-actions button { flex: 1; }
+  .story-skip { background: transparent !important; color: var(--tg-text-secondary) !important; box-shadow: none !important; }
+  .story-step { display: none; }
+  .story-step.active { display: contents; }
+
+  /* === CONFETTI (Catizen pattern) === */
+  .confetti-container {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none; z-index: 200; overflow: hidden;
+    display: none;
+  }
+  .confetti-container.show { display: block; }
+  .confetti-piece {
+    position: absolute; width: 8px; height: 12px;
+    top: -20px; opacity: 0;
+    animation: confettiFall 3s linear forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(800px) rotate(720deg); opacity: 0; }
+  }
+
+  /* === BOOST WIDGET === */
+  .boost-card {
+    background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+    border-radius: 12px; padding: 12px 14px; margin-bottom: 12px;
+    color: white; position: relative; overflow: hidden;
+    animation: boostPulse 2s infinite;
+  }
+  @keyframes boostPulse {
+    0%,100% { box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3); }
+    50% { box-shadow: 0 4px 32px rgba(76, 175, 80, 0.6); }
+  }
+  .boost-card::before {
+    content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: boostShine 3s infinite;
+  }
+  @keyframes boostShine { to { left: 200%; } }
+  .boost-row { display: flex; align-items: center; gap: 10px; position: relative; z-index: 1; }
+  .boost-icon { font-size: 24px; animation: boostRotate 4s infinite linear; }
+  @keyframes boostRotate { to { transform: rotate(360deg); } }
+  .boost-info { flex: 1; }
+  .boost-title { font-weight: 700; font-size: 13px; }
+  .boost-sub { font-size: 11px; opacity: 0.9; margin-top: 1px; }
+  .boost-multiplier {
+    background: white; color: #2e7d32; padding: 3px 8px;
+    border-radius: 12px; font-weight: 800; font-size: 12px;
+  }
+
+  /* === STAT CARDS === */
+  .stat-hero {
+    background: linear-gradient(135deg, rgba(249,115,22,0.15) 0%, rgba(234,88,12,0.05) 100%);
+    border: 1px solid rgba(249,115,22,0.3);
+    border-radius: 14px; padding: 20px; margin-bottom: 16px;
+  }
+  .stat-hero .label { font-size: 11px; color: var(--brand-orange); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .stat-hero .value { font-size: 36px; font-weight: 900; line-height: 1; margin-bottom: 4px;
+    background: linear-gradient(135deg, #fb923c, #ea580c);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .stat-hero .sub { font-size: 12px; color: var(--tg-text-secondary); }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .stat-card {
+    background: var(--tg-bg-secondary);
+    border-radius: 10px; padding: 12px;
+  }
+  .stat-card .icon { font-size: 18px; margin-bottom: 4px; }
+  .stat-card .label { font-size: 11px; color: var(--tg-text-secondary); margin-bottom: 2px; }
+  .stat-card .value { font-size: 18px; font-weight: 700; }
+
+  /* === REF LINK === */
+  .ref-link-card {
+    background: var(--tg-bg-secondary);
+    border-radius: 12px; padding: 14px; margin-bottom: 16px;
+    border: 1px dashed rgba(249,115,22,0.3);
+  }
+  .ref-link-card .label { font-size: 11px; color: var(--tg-text-secondary); margin-bottom: 6px; }
+  .ref-link-card .link {
+    background: rgba(0,0,0,0.3); padding: 8px 10px;
+    border-radius: 6px; font-family: 'SF Mono', Monaco, monospace;
+    font-size: 11px; color: var(--tg-link);
+    word-break: break-all; margin-bottom: 8px;
+  }
+  .ref-link-card .actions { display: flex; gap: 6px; }
+  .ref-link-card .actions button {
+    flex: 1; background: var(--tg-bg-tertiary);
+    border: none; color: white; padding: 8px;
+    border-radius: 6px; font-size: 12px; cursor: pointer;
+  }
+
+  /* === NETWORK TREE === */
+  .tree-node {
+    background: var(--tg-bg-secondary);
+    border-radius: 10px; padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 10px;
+    position: relative;
+  }
+  .tree-node.you {
+    background: linear-gradient(135deg, rgba(249,115,22,0.2) 0%, rgba(234,88,12,0.1) 100%);
+    border: 1px solid var(--brand-orange);
+  }
+  .tree-node .lvl-badge {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+  }
+  .lvl-l1 { background: rgba(249,115,22,0.25); color: var(--brand-orange); }
+  .lvl-l2 { background: rgba(98,177,235,0.25); color: var(--tg-link); }
+  .lvl-l3 { background: rgba(170,184,194,0.25); color: var(--tg-text-secondary); }
+  .lvl-you { background: var(--brand-orange); color: white; }
+
+  .tree-info { flex: 1; }
+  .tree-info .name { font-size: 13px; font-weight: 600; }
+  .tree-info .sub { font-size: 11px; color: var(--tg-text-secondary); margin-top: 1px; }
+  .tree-amount { font-size: 13px; font-weight: 700; color: var(--success); font-family: monospace; }
+
+  .tree-indent-1 { margin-left: 16px; }
+  .tree-indent-2 { margin-left: 32px; }
+
+  .tree-line {
+    position: absolute;
+    left: -16px; top: 0; bottom: 50%;
+    width: 1px; background: var(--border);
+  }
+  .tree-line::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; width: 12px;
+    height: 1px; background: var(--border);
+  }
+
+  /* === LEADERBOARD === */
+  .lb-row {
+    background: var(--tg-bg-secondary);
+    border-radius: 10px; padding: 10px 12px;
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .lb-row.you { background: linear-gradient(135deg, rgba(249,115,22,0.2), rgba(234,88,12,0.1)); border: 1px solid var(--brand-orange); }
+  .lb-rank {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--tg-bg-tertiary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+  }
+  .lb-rank.gold { background: linear-gradient(135deg, #ffd700, #ffa500); color: black; }
+  .lb-rank.silver { background: linear-gradient(135deg, #c0c0c0, #888); color: black; }
+  .lb-rank.bronze { background: linear-gradient(135deg, #cd7f32, #8b4513); color: white; }
+
+  .lb-info { flex: 1; }
+  .lb-info .name { font-size: 13px; font-weight: 600; }
+  .lb-info .sub { font-size: 11px; color: var(--tg-text-secondary); }
+  .lb-amount { font-family: monospace; font-size: 13px; font-weight: 700; color: var(--success); }
+
+  /* === WALLET TX === */
+  .tx-row {
+    background: var(--tg-bg-secondary);
+    border-radius: 10px; padding: 12px;
+    margin-bottom: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .tx-info .title { font-size: 13px; font-weight: 600; }
+  .tx-info .date { font-size: 11px; color: var(--tg-text-secondary); margin-top: 2px; }
+  .tx-amount { font-family: monospace; font-size: 14px; font-weight: 700; }
+  .tx-amount.in { color: var(--success); }
+  .tx-amount.out { color: var(--brand-orange); }
+  .tx-status {
+    font-size: 10px; padding: 2px 6px; border-radius: 4px;
+    margin-left: 8px; font-weight: 600;
+  }
+  .tx-status.pending { background: rgba(255,152,0,0.2); color: var(--warning); }
+  .tx-status.done { background: rgba(76,175,80,0.2); color: var(--success); }
+
+  /* === SECTION TITLE === */
+  .section-title {
+    font-size: 11px; color: var(--tg-text-hint);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin: 16px 0 8px;
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  /* === LANG === */
+  .lang-content { display: none !important; }
+  .lang-content.active { display: block !important; }
+  .lang-content.active.lc-inline { display: inline !important; }
+
+  /* === SCENARIO CONTENT === */
+  .scenario-content { display: none; }
+  .scenario-content.active { display: block; }
+
+  /* === TIER PROGRESS === */
+  .tier-progress {
+    background: var(--tg-bg-secondary);
+    border-radius: 12px; padding: 14px; margin-bottom: 16px;
+  }
+  .tier-progress .header-row {
+    display: flex; justify-content: space-between;
+    margin-bottom: 8px; font-size: 12px;
+  }
+  .tier-progress .bar {
+    height: 8px; background: rgba(0,0,0,0.3);
+    border-radius: 4px; overflow: hidden; margin-bottom: 6px;
+  }
+  .tier-progress .fill {
+    height: 100%; background: linear-gradient(90deg, #f97316, #fb923c);
+    border-radius: 4px;
+  }
+  .tier-progress .footer-row { font-size: 10px; color: var(--tg-text-hint); }
+
+  /* === CHART === */
+  .chart-card {
+    background: var(--tg-bg-secondary);
+    border-radius: 12px; padding: 14px; margin-bottom: 16px;
+  }
+  .chart-bars {
+    display: flex; align-items: flex-end; gap: 4px;
+    height: 80px; margin-top: 8px;
+  }
+  .chart-bar {
+    flex: 1; background: linear-gradient(180deg, #f97316, #ea580c);
+    border-radius: 3px 3px 0 0; opacity: 0.4;
+    transition: opacity 0.3s;
+  }
+  .chart-bar.now { opacity: 1; }
+  .chart-bar:hover { opacity: 1; }
+  .chart-labels {
+    display: flex; gap: 4px; margin-top: 4px;
+  }
+  .chart-labels span {
+    flex: 1; text-align: center; font-size: 9px;
+    color: var(--tg-text-hint);
+  }
+
+  /* === ACTION ROW === */
+  .action-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; margin-bottom: 16px;
+  }
+  .action-card {
+    background: var(--tg-bg-secondary);
+    border-radius: 10px; padding: 14px 10px;
+    text-align: center; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .action-card:hover { background: var(--tg-bg-tertiary); }
+  .action-card .icon { font-size: 22px; margin-bottom: 6px; }
+  .action-card .label { font-size: 11px; font-weight: 600; }
+
+  /* === BADGE === */
+  .badge-tier {
+    display: inline-block; padding: 3px 8px; border-radius: 10px;
+    font-size: 10px; font-weight: 700;
+  }
+  .badge-tier.starter { background: rgba(170,184,194,0.2); color: #cbd5e0; }
+  .badge-tier.growth { background: rgba(98,177,235,0.2); color: var(--tg-link); }
+  .badge-tier.vip { background: rgba(249,115,22,0.25); color: var(--brand-orange); }
+
+  /* HR */
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+
+  /* === STATE TOGGLE (Empty / Loading / Error demo) === */
+  .state-toggle {
+    display: inline-flex; gap: 4px;
+    background: rgba(255,255,255,0.06);
+    padding: 4px; border-radius: 20px; margin-top: 10px;
+  }
+  .state-btn {
+    padding: 6px 12px; background: transparent; border: none;
+    color: white; border-radius: 16px; cursor: pointer; font-size: 11px;
+    transition: all 0.2s;
+  }
+  .state-btn.active {
+    background: linear-gradient(135deg, #62b1eb 0%, #3a92d4 100%);
+    box-shadow: 0 2px 8px rgba(98, 177, 235, 0.3);
+  }
+
+  /* === STATE OVERLAY (covers content area) === */
+  .state-overlay {
+    position: absolute; top: 56px; left: 0; right: 0; bottom: 64px;
+    background: var(--tg-bg);
+    z-index: 60; padding: 20px;
+    display: none; flex-direction: column;
+    overflow-y: auto;
+  }
+  .state-overlay.show { display: flex; }
+
+  /* Loading skeleton */
+  .skel-block {
+    background: linear-gradient(90deg, var(--tg-bg-secondary) 0%, var(--tg-bg-tertiary) 50%, var(--tg-bg-secondary) 100%);
+    background-size: 200% 100%;
+    animation: skelShimmer 1.4s infinite;
+    border-radius: 8px;
+  }
+  @keyframes skelShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .skel-hero { height: 90px; margin-bottom: 14px; }
+  .skel-card { height: 60px; margin-bottom: 10px; }
+  .skel-row  { height: 16px; margin-bottom: 8px; width: 80%; }
+  .skel-row.short { width: 50%; }
+  .skel-spinner {
+    width: 36px; height: 36px;
+    border: 3px solid rgba(255,255,255,0.1);
+    border-top-color: var(--brand-orange);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 8px auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .skel-label {
+    font-size: 11px; color: var(--tg-text-hint);
+    text-align: center; letter-spacing: 1px; margin: 4px 0 16px;
+  }
+
+  /* Empty state */
+  .empty-wrap, .error-wrap {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 24px;
+  }
+  .empty-icon, .error-icon {
+    font-size: 64px; margin-bottom: 14px; opacity: 0.85;
+    animation: emptyFloat 3s ease-in-out infinite;
+  }
+  @keyframes emptyFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .empty-title, .error-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 6px;
+  }
+  .error-title { color: var(--tg-destructive); }
+  .empty-desc, .error-desc {
+    font-size: 13px; color: var(--tg-text-secondary);
+    line-height: 1.5; max-width: 280px; margin-bottom: 18px;
+  }
+  .error-detail {
+    font-size: 11px; color: var(--tg-text-hint);
+    font-family: monospace;
+    background: rgba(255, 89, 90, 0.08);
+    border: 1px dashed rgba(255, 89, 90, 0.3);
+    padding: 8px 10px; border-radius: 8px;
+    margin-bottom: 18px; max-width: 280px;
+    word-break: break-all;
+  }
+  .empty-cta, .error-cta {
+    display: flex; gap: 8px; flex-direction: column; width: 100%; max-width: 240px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: white; border: none; padding: 12px 16px; border-radius: 10px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  .btn-secondary {
+    background: var(--tg-bg-secondary);
+    color: var(--tg-text); border: 1px solid var(--border);
+    padding: 12px 16px; border-radius: 10px; font-size: 13px; cursor: pointer;
+  }
+
+  /* === TIER DOWNGRADE WARNING === */
+  .tier-down-warn {
+    background: linear-gradient(135deg, rgba(255, 89, 90, 0.15) 0%, rgba(255, 152, 0, 0.08) 100%);
+    border: 1px solid rgba(255, 89, 90, 0.4);
+    border-radius: 12px; padding: 12px 14px; margin-bottom: 14px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .tier-down-icon {
+    font-size: 22px; flex-shrink: 0;
+    animation: warnPulse 2s ease-in-out infinite;
+  }
+  @keyframes warnPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+  .tier-down-body { flex: 1; font-size: 12px; line-height: 1.5; }
+  .tier-down-title {
+    font-size: 13px; font-weight: 700; color: var(--tg-destructive);
+    margin-bottom: 3px; letter-spacing: 0.3px;
+  }
+  .tier-down-desc { color: var(--tg-text-secondary); margin-bottom: 6px; }
+  .tier-down-action {
+    color: var(--tg-link); font-size: 11px; font-weight: 600;
+    cursor: pointer; text-decoration: underline;
+  }
+
+  /* === NETWORK TOOLBAR (filter + search + pagination) === */
+  .net-toolbar {
+    background: var(--tg-bg-secondary);
+    border-radius: 12px; padding: 10px;
+    margin-bottom: 12px;
+  }
+  .net-search-wrap {
+    position: relative; margin-bottom: 8px;
+  }
+  .net-search-wrap input {
+    width: 100%; background: var(--tg-bg);
+    border: 1px solid var(--border); color: white;
+    padding: 8px 10px 8px 30px; border-radius: 8px;
+    font-size: 12px;
+  }
+  .net-search-wrap input:focus { outline: none; border-color: var(--tg-link); }
+  .net-search-wrap::before {
+    content: '🔍'; position: absolute; left: 9px; top: 50%;
+    transform: translateY(-50%); font-size: 13px; opacity: 0.6;
+  }
+  .net-filter-chips {
+    display: flex; gap: 4px; overflow-x: auto;
+    -ms-overflow-style: none; scrollbar-width: none;
+  }
+  .net-filter-chips::-webkit-scrollbar { display: none; }
+  .filter-chip {
+    flex-shrink: 0; padding: 5px 10px; border-radius: 14px;
+    background: rgba(255,255,255,0.05);
+    color: var(--tg-text-secondary); font-size: 11px;
+    border: 1px solid transparent; cursor: pointer;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .filter-chip.active {
+    background: rgba(249, 115, 22, 0.2); color: var(--brand-orange);
+    border-color: var(--brand-orange); font-weight: 600;
+  }
+  .filter-chip:hover { background: rgba(255,255,255,0.1); }
+  .net-meta {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--tg-text-hint);
+    margin-bottom: 8px; padding: 0 4px;
+  }
+  .net-sort-btn {
+    background: transparent; border: none; color: var(--tg-link);
+    font-size: 10px; cursor: pointer; padding: 0;
+  }
+  .load-more-btn {
+    width: 100%; background: var(--tg-bg-secondary);
+    border: 1px dashed var(--border); color: var(--tg-link);
+    padding: 12px; border-radius: 10px; cursor: pointer;
+    font-size: 12px; font-weight: 600; margin-top: 8px;
+    transition: all 0.2s;
+  }
+  .load-more-btn:hover { background: var(--tg-bg-tertiary); border-style: solid; }
+  .net-page-indicator {
+    text-align: center; font-size: 10px; color: var(--tg-text-hint);
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📱 FunAgency Telegram MiniApp</h1>
+  <div class="subtitle">Full-screen WebApp inside Telegram · 4 Tabs · 1-Tier Direct Referral · VI · RU · EN</div>
+
+  <div class="lang-toggle">
+    <button class="lang-btn active" data-lang="vi">🇻🇳 VI</button>
+    <button class="lang-btn" data-lang="ru">🇷🇺 RU</button>
+    <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
+  </div>
+
+  <div class="scenario-tabs">
+    <button class="tab active" data-scenario="home">🏠 Home</button>
+    <button class="tab" data-scenario="network">🌐 Network</button>
+    <button class="tab" data-scenario="stats">📊 Stats</button>
+    <button class="tab" data-scenario="wallet">💰 Wallet</button>
+    <button class="tab" data-scenario="withdraw">💸 Withdraw</button>
+    <button class="tab" data-scenario="share">🔗 Share</button>
+    <button class="tab" id="settingsTabBtn" type="button" onclick="event.preventDefault(); event.stopPropagation(); openModal('settingsModal'); return false;">⚙️ Settings</button>
+  </div>
+
+  <div class="state-toggle" title="Demo loading / empty / error states for the active scenario">
+    <button class="state-btn active" data-state="normal">✅ Normal</button>
+    <button class="state-btn" data-state="loading">⏳ Loading</button>
+    <button class="state-btn" data-state="empty">📭 Empty</button>
+    <button class="state-btn" data-state="error">⚠️ Error</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- LEFT PANEL: Why this works -->
+  <div class="left-panel">
+    <div class="panel-title">💡 UX Design Notes</div>
+
+    <div class="design-note" data-show-on="home">
+      <span class="label">Stat hero up top</span>
+      <span class="why">Số tiền đang kiếm hiện ngay đầu màn hình. Mở MiniApp = thấy tiền = retention boost.</span>
+    </div>
+    <div class="design-note" data-show-on="home">
+      <span class="label">Tier progress visible</span>
+      <span class="why">3 tier (Starter/Growth/VIP) — bar progress motivate user upgrade.</span>
+    </div>
+    <div class="design-note" data-show-on="home">
+      <span class="label">Quick actions 2x2</span>
+      <span class="why">4 hành động chính (Share / Withdraw / Network / Stats). Native-feeling tabs.</span>
+    </div>
+
+    <div class="design-note" data-show-on="network">
+      <span class="label">1-tier flat list</span>
+      <span class="why">Chỉ direct refs (no cascade). Đơn giản, transparent, không MLM-vibe → trust ↑.</span>
+    </div>
+    <div class="design-note" data-show-on="network">
+      <span class="label">Active vs Inactive split</span>
+      <span class="why">Section riêng cho ref đang chạy + ref tạm dừng. User biết rõ status từng người.</span>
+    </div>
+    <div class="design-note" data-show-on="network">
+      <span class="label">Per-ref earnings + start date</span>
+      <span class="why">Show từ tháng nào → user thấy được lifetime value của 1 ref. Motivation để giới thiệu thêm.</span>
+    </div>
+
+    <div class="design-note" data-show-on="stats">
+      <span class="label">Bar chart 6 months</span>
+      <span class="why">Trend visualization → user thấy growth → motivate scale network.</span>
+    </div>
+    <div class="design-note" data-show-on="stats">
+      <span class="label">Leaderboard FOMO</span>
+      <span class="why">Top 10 tháng. Show user position. Top 3 = gold/silver/bronze. Gamification.</span>
+    </div>
+
+    <div class="design-note" data-show-on="wallet">
+      <span class="label">Available + Pending split</span>
+      <span class="why">User cần biết tiền nào rút được, tiền nào đang hold. Transparent = trust.</span>
+    </div>
+    <div class="design-note" data-show-on="wallet">
+      <span class="label">TX history infinite</span>
+      <span class="why">List có thể scroll, cho phép user verify từng giao dịch. Anti-fraud trust.</span>
+    </div>
+
+    <div class="design-note" data-show-on="withdraw">
+      <span class="label">Quick amount chips</span>
+      <span class="why">$100/$300/$500/Max — giảm typing trên mobile.</span>
+    </div>
+    <div class="design-note" data-show-on="withdraw">
+      <span class="label">Confirmation step</span>
+      <span class="why">Show wallet partial hash để user verify. Safety check.</span>
+    </div>
+
+    <div class="design-note" data-show-on="share">
+      <span class="label">QR + copy + native share</span>
+      <span class="why">3 cách share. QR cho gặp face-to-face, copy cho chat, native cho mọi app.</span>
+    </div>
+    <div class="design-note" data-show-on="share">
+      <span class="label">Pre-written messages</span>
+      <span class="why">User lười viết → cho 2-3 template ngắn ready-to-paste.</span>
+    </div>
+  </div>
+
+  <!-- CENTER: PHONE -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="screen">
+        <!-- Story Onboarding overlay (hidden by default) -->
+        <div class="story-overlay" id="storyOverlay">
+          <div class="story-progress">
+            <span class="active"></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="story-content">
+            <div class="story-step active" data-step="1">
+              <div class="story-emoji">👋</div>
+              <div class="story-title">
+                <span class="lang-content active" data-lang="vi">Chào mừng đến FunAgency!</span>
+                <span class="lang-content" data-lang="ru">Добро пожаловать в FunAgency!</span>
+                <span class="lang-content" data-lang="en">Welcome to FunAgency!</span>
+              </div>
+              <div class="story-text">
+                <span class="lang-content active" data-lang="vi">Kiếm tiền lifetime từ network của bạn — không cần bán hàng, chỉ chia sẻ.</span>
+                <span class="lang-content" data-lang="ru">Зарабатывай лайфтайм с сети — без продаж, просто делись.</span>
+                <span class="lang-content" data-lang="en">Earn lifetime from your network — no selling, just share.</span>
+              </div>
+            </div>
+            <div class="story-step" data-step="2">
+              <div class="story-emoji">💰</div>
+              <div class="story-title">
+                <span class="lang-content active" data-lang="vi">1% lifetime mỗi ref</span>
+                <span class="lang-content" data-lang="ru">1% лайфтайм каждого реферала</span>
+                <span class="lang-content" data-lang="en">1% lifetime per ref</span>
+              </div>
+              <div class="story-text">
+                <span class="lang-content active" data-lang="vi">Ref spend $20K/tháng → bạn nhận $200/tháng vĩnh viễn. Càng nhiều ref → càng nhiều thu nhập.</span>
+                <span class="lang-content" data-lang="ru">Реф $20K → ты $200/мес лайфтайм. Больше рефов = больше дохода.</span>
+                <span class="lang-content" data-lang="en">Ref $20K → you $200/mo lifetime. More refs = more income.</span>
+              </div>
+            </div>
+            <div class="story-step" data-step="3">
+              <div class="story-emoji">🚀</div>
+              <div class="story-title">
+                <span class="lang-content active" data-lang="vi">Sẵn sàng kiếm tiền?</span>
+                <span class="lang-content" data-lang="ru">Готов зарабатывать?</span>
+                <span class="lang-content" data-lang="en">Ready to earn?</span>
+              </div>
+              <div class="story-text">
+                <span class="lang-content active" data-lang="vi">Speed Bonus +$300 đợi bạn nếu đạt 3 ref active trong 90 ngày đầu!</span>
+                <span class="lang-content" data-lang="ru">Speed Bonus +$300 ждёт за 3 рефа в 90 дней!</span>
+                <span class="lang-content" data-lang="en">Speed Bonus +$300 awaits if you hit 3 refs in 90 days!</span>
+              </div>
+            </div>
+          </div>
+          <div class="story-actions">
+            <button class="secondary-button story-skip" onclick="closeStory()">
+              <span class="lang-content active lc-inline" data-lang="vi">Bỏ qua</span>
+              <span class="lang-content lc-inline" data-lang="ru">Пропустить</span>
+              <span class="lang-content lc-inline" data-lang="en">Skip</span>
+            </button>
+            <button class="main-button" onclick="nextStoryStep()" id="storyNextBtn">
+              <span class="lang-content active lc-inline" data-lang="vi">Tiếp →</span>
+              <span class="lang-content lc-inline" data-lang="ru">Далее →</span>
+              <span class="lang-content lc-inline" data-lang="en">Next →</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Confetti container -->
+        <div class="confetti-container" id="confetti"></div>
+
+        <!-- Settings Modal -->
+        <div class="modal-overlay" id="settingsModal">
+          <div class="modal-header">
+            <span class="modal-close" onclick="closeModal('settingsModal')">
+              <span class="lang-content active lc-inline" data-lang="vi">← Đóng</span>
+              <span class="lang-content lc-inline" data-lang="ru">← Закрыть</span>
+              <span class="lang-content lc-inline" data-lang="en">← Close</span>
+            </span>
+            <span class="modal-title">⚙️
+              <span class="lang-content active lc-inline" data-lang="vi">Cài đặt</span>
+              <span class="lang-content lc-inline" data-lang="ru">Настройки</span>
+              <span class="lang-content lc-inline" data-lang="en">Settings</span>
+            </span>
+            <span style="width:60px"></span>
+          </div>
+          <div class="modal-body">
+            <!-- Profile -->
+            <div class="settings-section">
+              <div class="settings-label">
+                <span class="lang-content active lc-inline" data-lang="vi">TÀI KHOẢN</span>
+                <span class="lang-content lc-inline" data-lang="ru">АККАУНТ</span>
+                <span class="lang-content lc-inline" data-lang="en">ACCOUNT</span>
+              </div>
+              <div class="settings-row">
+                <span class="settings-row-label">Telegram</span>
+                <span class="settings-row-value">@your_username</span>
+              </div>
+              <div class="settings-row">
+                <span class="settings-row-label">
+                  <span class="lang-content active lc-inline" data-lang="vi">Tham gia từ</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Регистрация</span>
+                  <span class="lang-content lc-inline" data-lang="en">Joined</span>
+                </span>
+                <span class="settings-row-value">12 Jan 2026 (4mo)</span>
+              </div>
+              <div class="settings-row">
+                <span class="settings-row-label">
+                  <span class="lang-content active lc-inline" data-lang="vi">Tier hiện tại</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Текущий тир</span>
+                  <span class="lang-content lc-inline" data-lang="en">Current tier</span>
+                </span>
+                <span class="settings-row-value"><span class="badge-tier growth">🥈 GROWTH</span></span>
+              </div>
+            </div>
+
+            <!-- Payout -->
+            <div class="settings-section">
+              <div class="settings-label">💸
+                <span class="lang-content active lc-inline" data-lang="vi">PAYOUT</span>
+                <span class="lang-content lc-inline" data-lang="ru">ВЫПЛАТЫ</span>
+                <span class="lang-content lc-inline" data-lang="en">PAYOUT</span>
+              </div>
+              <div class="settings-row">
+                <span class="settings-row-label">
+                  <span class="lang-content active lc-inline" data-lang="vi">Phương thức</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Метод</span>
+                  <span class="lang-content lc-inline" data-lang="en">Method</span>
+                </span>
+                <span class="settings-row-value">USDT TRC20 <span class="arrow">›</span></span>
+              </div>
+              <div class="settings-row">
+                <span class="settings-row-label">Wallet</span>
+                <span class="settings-row-value mono">T...x9k2vN8mR <span class="arrow">›</span></span>
+              </div>
+              <div class="settings-row">
+                <span class="settings-row-label">
+                  <span class="lang-content active lc-inline" data-lang="vi">Auto-payout (≥$200)</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Авто-вывод (≥$200)</span>
+                  <span class="lang-content lc-inline" data-lang="en">Auto-payout (≥$200)</span>
+                </span>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+            </div>
+
+            <!-- Notifications -->
+            <div class="settings-section">
+              <div class="settings-label">🔔
+                <span class="lang-content active lc-inline" data-lang="vi">THÔNG BÁO</span>
+                <span class="lang-content lc-inline" data-lang="ru">УВЕДОМЛЕНИЯ</span>
+                <span class="lang-content lc-inline" data-lang="en">NOTIFICATIONS</span>
+              </div>
+              <div class="settings-row">
+                <span class="settings-row-label">
+                  <span class="lang-content active lc-inline" data-lang="vi">Conversion mới</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Новые конверсии</span>
+                  <span class="lang-content lc-inline" data-lang="en">New conversion</span>
+                </span>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="settings-row">
+                <span class="settings-row-label">
+                  <span class="lang-content active lc-inline" data-lang="vi">Daily streak</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Ежедневная серия</span>
+                  <span class="lang-content lc-inline" data-lang="en">Daily streak</span>
+                </span>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="settings-row">
+                <span class="settings-row-label">
+                  <span class="lang-content active lc-inline" data-lang="vi">Prize Pool / Squad</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Приз-фонд / Сквад</span>
+                  <span class="lang-content lc-inline" data-lang="en">Prize Pool / Squad</span>
+                </span>
+                <div class="toggle" onclick="this.classList.toggle('on')"></div>
+              </div>
+            </div>
+
+            <!-- Language -->
+            <div class="settings-section">
+              <div class="settings-label">🌐
+                <span class="lang-content active lc-inline" data-lang="vi">NGÔN NGỮ</span>
+                <span class="lang-content lc-inline" data-lang="ru">ЯЗЫК</span>
+                <span class="lang-content lc-inline" data-lang="en">LANGUAGE</span>
+              </div>
+              <div class="settings-row" onclick="closeModal('settingsModal'); document.querySelector('.lang-btn[data-lang=&quot;vi&quot;]').click();">
+                <span class="settings-row-label">🇻🇳 Tiếng Việt</span>
+                <span class="settings-row-value">✓</span>
+              </div>
+              <div class="settings-row" onclick="closeModal('settingsModal'); document.querySelector('.lang-btn[data-lang=&quot;ru&quot;]').click();">
+                <span class="settings-row-label">🇷🇺 Русский</span>
+                <span class="settings-row-value"><span class="arrow">›</span></span>
+              </div>
+              <div class="settings-row" onclick="closeModal('settingsModal'); document.querySelector('.lang-btn[data-lang=&quot;en&quot;]').click();">
+                <span class="settings-row-label">🇬🇧 English</span>
+                <span class="settings-row-value"><span class="arrow">›</span></span>
+              </div>
+            </div>
+
+            <!-- Support -->
+            <div class="settings-section">
+              <div class="settings-label">🆘
+                <span class="lang-content active lc-inline" data-lang="vi">HỖ TRỢ</span>
+                <span class="lang-content lc-inline" data-lang="ru">ПОДДЕРЖКА</span>
+                <span class="lang-content lc-inline" data-lang="en">SUPPORT</span>
+              </div>
+              <div class="settings-row" onclick="closeModal('settingsModal'); openModal('faqModal');">
+                <span class="settings-row-label">📚
+                  <span class="lang-content active lc-inline" data-lang="vi">Câu hỏi thường gặp</span>
+                  <span class="lang-content lc-inline" data-lang="ru">FAQ</span>
+                  <span class="lang-content lc-inline" data-lang="en">FAQ</span>
+                </span>
+                <span class="settings-row-value"><span class="arrow">›</span></span>
+              </div>
+              <div class="settings-row" onclick="alert('💬 Demo: Mở chat với manager (Telegram)')">
+                <span class="settings-row-label">💬
+                  <span class="lang-content active lc-inline" data-lang="vi">Liên hệ manager</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Чат с менеджером</span>
+                  <span class="lang-content lc-inline" data-lang="en">Chat with manager</span>
+                </span>
+                <span class="settings-row-value">@funagency_pm <span class="arrow">›</span></span>
+              </div>
+              <div class="settings-row" onclick="alert('Demo: Logout / Disconnect MiniApp')">
+                <span class="settings-row-label" style="color:var(--tg-destructive)">
+                  <span class="lang-content active lc-inline" data-lang="vi">Đăng xuất</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Выйти</span>
+                  <span class="lang-content lc-inline" data-lang="en">Logout</span>
+                </span>
+                <span class="settings-row-value"><span class="arrow">›</span></span>
+              </div>
+            </div>
+
+            <div style="text-align:center;font-size:11px;color:var(--tg-text-hint);padding:10px 0">
+              FunAgency MiniApp v1.0.0 · Build 2026.05
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Modal -->
+        <div class="modal-overlay" id="faqModal">
+          <div class="modal-header">
+            <span class="modal-close" onclick="closeModal('faqModal')">
+              <span class="lang-content active lc-inline" data-lang="vi">← Đóng</span>
+              <span class="lang-content lc-inline" data-lang="ru">← Закрыть</span>
+              <span class="lang-content lc-inline" data-lang="en">← Close</span>
+            </span>
+            <span class="modal-title">📚 FAQ</span>
+            <span style="width:60px"></span>
+          </div>
+          <div class="modal-body">
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">
+                <span>
+                  <span class="lang-content active lc-inline" data-lang="vi">Tôi nhận hoa hồng bao nhiêu?</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Сколько комиссии?</span>
+                  <span class="lang-content lc-inline" data-lang="en">How much commission?</span>
+                </span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="faq-answer"><div class="faq-answer-content">
+                <span class="lang-content active" data-lang="vi"><b>1% lifetime</b> trên spend của ref. Ví dụ: ref spend $20K → bạn nhận $200/tháng vĩnh viễn (đến khi ref ngừng hoạt động).</span>
+                <span class="lang-content" data-lang="ru"><b>1% лайфтайм</b> от спенда реферала. Пример: реф $20K → ты $200/мес.</span>
+                <span class="lang-content" data-lang="en"><b>1% lifetime</b> on ref's spend. Example: ref $20K → you $200/mo forever.</span>
+              </div></div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">
+                <span>
+                  <span class="lang-content active lc-inline" data-lang="vi">Khi nào ref được tính qualifying?</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Когда реф квалифицируется?</span>
+                  <span class="lang-content lc-inline" data-lang="en">When does ref qualify?</span>
+                </span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="faq-answer"><div class="faq-answer-content">
+                <span class="lang-content active" data-lang="vi">Ref phải spend <b>≥ $10,000</b> VÀ active <b>≥ 2 tháng</b> liên tục. Sau đó hoa hồng tính từ tháng 3 trở đi.</span>
+                <span class="lang-content" data-lang="ru">Реф должен потратить <b>≥ $10K</b> И активен <b>≥ 2 мес</b>. Комиссия с 3-го мес.</span>
+                <span class="lang-content" data-lang="en">Ref must spend <b>≥ $10K</b> AND active <b>≥ 2 months</b>. Commission starts month 3+.</span>
+              </div></div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">
+                <span>
+                  <span class="lang-content active lc-inline" data-lang="vi">Boost 1.5x là gì? Cách kích hoạt?</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Что такое Boost 1.5x?</span>
+                  <span class="lang-content lc-inline" data-lang="en">What is Boost 1.5x?</span>
+                </span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="faq-answer"><div class="faq-answer-content">
+                <span class="lang-content active" data-lang="vi">Boost = nhân hoa hồng 1.5x trong 30 ngày. Kích hoạt khi: <b>(1)</b> Đạt Speed Bonus 5 ref/90d, hoặc <b>(2)</b> Top 10 leaderboard tháng, hoặc <b>(3)</b> Conference event campaign. Áp dụng tất cả ref hiện tại.</span>
+                <span class="lang-content" data-lang="ru">Boost = ×1.5 комиссия 30 дней. Активируется: (1) Speed Bonus 5/90d, (2) Топ-10 месяца, (3) Кампания на конференциях.</span>
+                <span class="lang-content" data-lang="en">Boost = 1.5x commission for 30 days. Activated by: (1) Speed Bonus 5/90d, (2) Monthly top 10, (3) Conference campaigns.</span>
+              </div></div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">
+                <span>
+                  <span class="lang-content active lc-inline" data-lang="vi">Speed Bonus / Volume Bonus?</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Speed / Volume Bonus?</span>
+                  <span class="lang-content lc-inline" data-lang="en">Speed / Volume Bonus?</span>
+                </span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="faq-answer"><div class="faq-answer-content">
+                <span class="lang-content active" data-lang="vi">Speed Bonus: <b>+$300 cash</b> nếu đạt 3 ref active trong 90 ngày. Volume Bonus: <b>+$1,000 cash</b> nếu đạt 5 ref active trong 90 ngày. Đếm từ ngày đăng ký, cộng dồn với 1% lifetime.</span>
+                <span class="lang-content" data-lang="ru">Speed: <b>+$300</b> за 3 актив рефа в 90 дней. Volume: <b>+$1,000</b> за 5 в 90 дней.</span>
+                <span class="lang-content" data-lang="en">Speed: <b>+$300 cash</b> for 3 active refs in 90d. Volume: <b>+$1,000 cash</b> for 5 in 90d. From signup, on top of 1% lifetime.</span>
+              </div></div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">
+                <span>
+                  <span class="lang-content active lc-inline" data-lang="vi">Tier Starter/Growth/VIP khác nhau gì?</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Чем отличаются тиры?</span>
+                  <span class="lang-content lc-inline" data-lang="en">Tiers explained?</span>
+                </span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="faq-answer"><div class="faq-answer-content">
+                <span class="lang-content active" data-lang="vi"><b>Starter</b> (0-2 ref active): 0.5%. <b>Growth</b> (3-9): 1%. <b>VIP</b> (10+): 1.5% + perks (dedicated manager, weekly payout, +$2K milestone bonus, exclusive channel).</span>
+                <span class="lang-content" data-lang="ru">Starter (0-2): 0.5%. Growth (3-9): 1%. VIP (10+): 1.5% + перки.</span>
+                <span class="lang-content" data-lang="en">Starter (0-2): 0.5%. Growth (3-9): 1%. VIP (10+): 1.5% + perks.</span>
+              </div></div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">
+                <span>
+                  <span class="lang-content active lc-inline" data-lang="vi">Khi nào nhận tiền?</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Когда выплата?</span>
+                  <span class="lang-content lc-inline" data-lang="en">When do I get paid?</span>
+                </span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="faq-answer"><div class="faq-answer-content">
+                <span class="lang-content active" data-lang="vi">Cycle hàng tháng. Hoa hồng tháng 5 → payout ngày 5/6. <b>14 ngày hold</b> anti-fraud trước payout. Min withdraw $50. Auto-payout option khi balance ≥ $200.</span>
+                <span class="lang-content" data-lang="ru">Месячный цикл. 14 дней холд. Мин $50. Авто-вывод при ≥$200.</span>
+                <span class="lang-content" data-lang="en">Monthly cycle. 14-day hold. Min $50. Auto-payout option at ≥$200.</span>
+              </div></div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">
+                <span>
+                  <span class="lang-content active lc-inline" data-lang="vi">Self-ref hoặc fraud?</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Self-ref или фрод?</span>
+                  <span class="lang-content lc-inline" data-lang="en">Self-ref or fraud?</span>
+                </span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="faq-answer"><div class="faq-answer-content">
+                <span class="lang-content active" data-lang="vi"><b>Cấm tuyệt đối</b>. Self-ref → ban + claw-back tất cả earnings. Chargeback từ ref → claw-back tỷ lệ tương ứng. Multi-account fraud → permanent ban.</span>
+                <span class="lang-content" data-lang="ru">Запрещено. Self-ref → бан + claw-back. Чарджбэк → пропорциональный возврат.</span>
+                <span class="lang-content" data-lang="en">Strictly banned. Self-ref → ban + claw-back. Chargeback → proportional refund.</span>
+              </div></div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">
+                <span>
+                  <span class="lang-content active lc-inline" data-lang="vi">Squad system hoạt động sao?</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Как работает Squad?</span>
+                  <span class="lang-content lc-inline" data-lang="en">How does Squad work?</span>
+                </span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="faq-answer"><div class="faq-answer-content">
+                <span class="lang-content active" data-lang="vi">Squad = nhóm 3-5 referrers. Squad leader nhận <b>+10% bonus</b> từ earnings của members. Đạt 5/5 squad → unlock <b>+15% bonus</b>. Tăng compound viral effect.</span>
+                <span class="lang-content" data-lang="ru">Squad = группа 3-5. Лидер +10% от членов. 5/5 → +15%.</span>
+                <span class="lang-content" data-lang="en">Squad = 3-5 referrer group. Leader gets +10% from members. Full 5/5 → +15% bonus.</span>
+              </div></div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">
+                <span>
+                  <span class="lang-content active lc-inline" data-lang="vi">Prize Pool $9K/tháng từ đâu?</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Откуда призовой фонд $9K?</span>
+                  <span class="lang-content lc-inline" data-lang="en">Where does $9K Prize Pool come from?</span>
+                </span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="faq-answer"><div class="faq-answer-content">
+                <span class="lang-content active" data-lang="vi"><b>Tài trợ trực tiếp bởi FunAgency</b> như marketing campaign. Top 3 referrers tháng nhận: $5K/$3K/$1K cash bonus. Reset mỗi đầu tháng. Không trừ vào commission của bạn.</span>
+                <span class="lang-content" data-lang="ru">Финансируется FunAgency как маркетинг. Топ-3: $5K/$3K/$1K. Не из вашей комиссии.</span>
+                <span class="lang-content" data-lang="en">Funded by FunAgency as marketing. Top 3: $5K/$3K/$1K. Not deducted from your commission.</span>
+              </div></div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">
+                <span>
+                  <span class="lang-content active lc-inline" data-lang="vi">Ref dừng chạy ads thì sao?</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Если реф остановит трафик?</span>
+                  <span class="lang-content lc-inline" data-lang="en">What if ref stops traffic?</span>
+                </span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="faq-answer"><div class="faq-answer-content">
+                <span class="lang-content active" data-lang="vi">Bạn nhận hoa hồng <b>chỉ tháng ref active</b>. Ref dừng → bạn dừng nhận. Ref quay lại → bạn nhận lại. Lifetime — không hết hạn, chỉ pause.</span>
+                <span class="lang-content" data-lang="ru">Получаешь только за активные месяцы. Возобновит — продолжишь.</span>
+                <span class="lang-content" data-lang="en">Earn only for active months. Resumes if ref returns. Lifetime — no expiry, just pause.</span>
+              </div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Push Notification Banner (TG Wallet pattern) -->
+        <div class="push-notif" id="pushNotif" onclick="closePush()">
+          <div class="push-icon">💰</div>
+          <div class="push-content">
+            <div class="push-title">FUNAGENCY · LIVE</div>
+            <div class="push-text" id="pushText">@buyer_alpha vừa spend $5K → +$50 cho bạn!</div>
+          </div>
+          <span class="push-close">✕</span>
+        </div>
+
+        <!-- Tier Upgrade Ceremony (Hamster Kombat pattern) -->
+        <div class="ceremony-overlay" id="ceremonyOverlay">
+          <div class="ceremony-trophy">🏆</div>
+          <div class="ceremony-title">VIP UNLOCKED!</div>
+          <div class="ceremony-subtitle">
+            <span class="lang-content active" data-lang="vi">Bạn đã đạt 10 ref active · Tier VIP kích hoạt vĩnh viễn</span>
+            <span class="lang-content" data-lang="ru">Достигнут VIP · 10 активных рефов · навсегда</span>
+            <span class="lang-content" data-lang="en">10 active refs · VIP tier unlocked forever</span>
+          </div>
+          <div class="ceremony-perks">
+            <div class="ceremony-perk">✨ <b>1.5% lifetime</b> rate (was 1%)</div>
+            <div class="ceremony-perk">⚡ <b>1.5x</b> Speed/Volume Bonus</div>
+            <div class="ceremony-perk">💎 Dedicated manager + weekly payout</div>
+            <div class="ceremony-perk">🔥 Exclusive VIP channel access</div>
+            <div class="ceremony-perk">🎁 +$2,000 milestone cash bonus</div>
+          </div>
+          <button class="main-button" style="max-width:240px" onclick="closeCeremony()">
+            🚀 <span class="lang-content active lc-inline" data-lang="vi">Khám phá VIP perks</span>
+            <span class="lang-content lc-inline" data-lang="ru">Изучить VIP</span>
+            <span class="lang-content lc-inline" data-lang="en">Explore VIP perks</span>
+          </button>
+          <button class="story-skip secondary-button" style="max-width:240px;margin-top:8px" onclick="closeCeremony()">
+            <span class="lang-content active lc-inline" data-lang="vi">Đóng</span>
+            <span class="lang-content lc-inline" data-lang="ru">Закрыть</span>
+            <span class="lang-content lc-inline" data-lang="en">Close</span>
+          </button>
+        </div>
+
+        <!-- TG TopBar -->
+        <div class="tg-bar">
+          <span class="back" onclick="openStory()" style="cursor:pointer" title="Replay onboarding">←</span>
+          <div class="title">FunAgency<div style="font-size:11px;font-weight:400;color:var(--tg-text-secondary);margin-top:1px">180+ teams · $1.2M/mo</div></div>
+          <div class="tg-bar-icons">
+            <span class="tg-icon-btn" onclick="openModal('faqModal')" title="FAQ">📚</span>
+            <span class="tg-icon-btn" onclick="openModal('settingsModal')" title="Settings">⚙️</span>
+            <span class="close" onclick="triggerConfetti()" style="cursor:pointer" title="Confetti demo">✕</span>
+          </div>
+        </div>
+
+        <!-- State overlays (loading / empty / error) -->
+        <div class="state-overlay" id="stateOverlay">
+          <!-- LOADING -->
+          <div class="state-view" data-view="loading">
+            <div class="skel-label">SYNCING DATA…</div>
+            <div class="skel-block skel-hero"></div>
+            <div class="skel-block skel-card"></div>
+            <div class="skel-block skel-card"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div class="skel-block" style="height:80px"></div>
+              <div class="skel-block" style="height:80px"></div>
+            </div>
+            <div class="skel-block skel-row"></div>
+            <div class="skel-block skel-row short"></div>
+            <div class="skel-spinner"></div>
+            <div style="text-align:center;font-size:11px;color:var(--tg-text-hint)">
+              <span class="lang-content active" data-lang="vi">Đang tải dữ liệu…</span>
+              <span class="lang-content" data-lang="ru">Загрузка данных…</span>
+              <span class="lang-content" data-lang="en">Loading data…</span>
+            </div>
+          </div>
+
+          <!-- EMPTY -->
+          <div class="state-view" data-view="empty" style="display:none">
+            <div class="empty-wrap">
+              <div class="empty-icon" id="emptyIcon">🌱</div>
+              <div class="empty-title" id="emptyTitle">
+                <span class="lang-content active" data-lang="vi">Chưa có dữ liệu</span>
+                <span class="lang-content" data-lang="ru">Пока пусто</span>
+                <span class="lang-content" data-lang="en">Nothing here yet</span>
+              </div>
+              <div class="empty-desc" id="emptyDesc">
+                <span class="lang-content active" data-lang="vi">Mời ref đầu tiên để bắt đầu kiếm 1% lifetime từ network của bạn.</span>
+                <span class="lang-content" data-lang="ru">Пригласи первого реферала, чтобы начать получать 1% лайфтайм.</span>
+                <span class="lang-content" data-lang="en">Invite your first ref to start earning 1% lifetime from your network.</span>
+              </div>
+              <div class="empty-cta">
+                <button class="btn-primary" onclick="setState('normal')">
+                  🚀 <span class="lang-content active lc-inline" data-lang="vi">Mời ngay</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Пригласить</span>
+                  <span class="lang-content lc-inline" data-lang="en">Invite now</span>
+                </button>
+                <button class="btn-secondary" onclick="setState('normal')">
+                  <span class="lang-content active lc-inline" data-lang="vi">Xem hướng dẫn</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Гайд</span>
+                  <span class="lang-content lc-inline" data-lang="en">View guide</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ERROR -->
+          <div class="state-view" data-view="error" style="display:none">
+            <div class="error-wrap">
+              <div class="error-icon">⚠️</div>
+              <div class="error-title">
+                <span class="lang-content active" data-lang="vi">Không tải được dữ liệu</span>
+                <span class="lang-content" data-lang="ru">Не удалось загрузить</span>
+                <span class="lang-content" data-lang="en">Failed to load</span>
+              </div>
+              <div class="error-desc">
+                <span class="lang-content active" data-lang="vi">Mất kết nối tới server. Kiểm tra internet và thử lại.</span>
+                <span class="lang-content" data-lang="ru">Нет связи с сервером. Проверь интернет и попробуй ещё раз.</span>
+                <span class="lang-content" data-lang="en">Lost connection to server. Check your internet and retry.</span>
+              </div>
+              <div class="error-detail">ERR_NETWORK · /api/v1/stats · 504 Gateway Timeout · req_id 7f3a9b</div>
+              <div class="error-cta">
+                <button class="btn-primary" onclick="setState('loading'); setTimeout(()=>setState('normal'), 1500);">
+                  🔄 <span class="lang-content active lc-inline" data-lang="vi">Thử lại</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Повторить</span>
+                  <span class="lang-content lc-inline" data-lang="en">Retry</span>
+                </button>
+                <button class="btn-secondary" onclick="alert('💬 Demo: open chat with @funagency_pm')">
+                  💬 <span class="lang-content active lc-inline" data-lang="vi">Báo lỗi</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Сообщить</span>
+                  <span class="lang-content lc-inline" data-lang="en">Report issue</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content" id="contentArea">
+
+          <!-- HOME SCENARIO -->
+          <div class="scenario-content active" data-scenario="home">
+            <!-- Tier downgrade risk warning (NEW: shows when 1+ ref dropped active in last 30d) -->
+            <div class="tier-down-warn" id="tierDownWarn">
+              <div class="tier-down-icon">⚠️</div>
+              <div class="tier-down-body">
+                <div class="tier-down-title">
+                  <span class="lang-content active" data-lang="vi">RỦI RO XUỐNG TIER</span>
+                  <span class="lang-content" data-lang="ru">РИСК ПОНИЖЕНИЯ ТИРА</span>
+                  <span class="lang-content" data-lang="en">TIER DOWNGRADE RISK</span>
+                </div>
+                <div class="tier-down-desc">
+                  <span class="lang-content active" data-lang="vi">2 ref dừng hoạt động trong 30 ngày → còn <b>3 ref active</b>. Mất thêm 1 ref nữa → tụt về <b>STARTER (0.5%)</b> trong 7 ngày.</span>
+                  <span class="lang-content" data-lang="ru">2 рефа неактивны 30 дней → осталось <b>3 активных</b>. Ещё минус 1 → понижение до <b>STARTER (0.5%)</b> через 7 дней.</span>
+                  <span class="lang-content" data-lang="en">2 refs inactive for 30 days → only <b>3 active left</b>. Lose 1 more → downgrade to <b>STARTER (0.5%)</b> in 7 days.</span>
+                </div>
+                <span class="tier-down-action" onclick="document.querySelector(&quot;button[data-scenario='network']&quot;).click()">
+                  <span class="lang-content active lc-inline" data-lang="vi">Xem ref đang dừng →</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Посмотреть рефов →</span>
+                  <span class="lang-content lc-inline" data-lang="en">View inactive refs →</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Hero stat -->
+            <div class="stat-hero">
+              <div class="label">
+                <span class="lang-content active" data-lang="vi">THU NHẬP THÁNG NÀY</span>
+                <span class="lang-content" data-lang="ru">ДОХОД В ЭТОМ МЕС</span>
+                <span class="lang-content" data-lang="en">EARNINGS THIS MONTH</span>
+              </div>
+              <div class="value" id="heroCounter" data-target="620">$0</div>
+              <div class="sub">
+                <span class="lang-content active" data-lang="vi">+ $89 đang chờ (14d hold)</span>
+                <span class="lang-content" data-lang="ru">+ $89 в холде (14d)</span>
+                <span class="lang-content" data-lang="en">+ $89 on hold (14d)</span>
+                · <span class="badge-tier growth">GROWTH</span>
+              </div>
+            </div>
+
+            <!-- Daily Streak (Hamster Kombat pattern) -->
+            <div class="streak-card">
+              <span class="streak-fire">🔥</span>
+              <div class="streak-info">
+                <div class="streak-count">
+                  <span class="lang-content active" data-lang="vi">5 ngày liên tiếp</span>
+                  <span class="lang-content" data-lang="ru">5 дней подряд</span>
+                  <span class="lang-content" data-lang="en">5-day streak</span>
+                </div>
+                <div class="streak-sub">
+                  <span class="lang-content active" data-lang="vi">Còn 2 ngày share link → +$50 streak bonus</span>
+                  <span class="lang-content" data-lang="ru">Ещё 2 дня → +$50 бонус</span>
+                  <span class="lang-content" data-lang="en">2 more days → +$50 streak bonus</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tier progress -->
+            <div class="tier-progress">
+              <div class="header-row">
+                <span style="color:var(--tg-text-secondary)">
+                  <span class="lang-content active" data-lang="vi">Tiến độ lên VIP</span>
+                  <span class="lang-content" data-lang="ru">Прогресс до VIP</span>
+                  <span class="lang-content" data-lang="en">Progress to VIP</span>
+                </span>
+                <span style="display:flex;gap:8px;align-items:center">
+                  <span style="background:linear-gradient(135deg,#4caf50,#2e7d32);color:white;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;cursor:pointer" onclick="event.stopPropagation(); openModal('faqModal')" title="Click to learn how Boost works">⚡ ×1.5 BOOST · 12d ⓘ</span>
+                  <span style="font-weight:600">5 / 10</span>
+                </span>
+              </div>
+              <div class="bar"><div class="fill" style="width: 50%"></div></div>
+              <div class="footer-row">
+                <span class="lang-content active" data-lang="vi">Còn 5 ref active → unlock VIP (1.5% lifetime, +0.5%)</span>
+                <span class="lang-content" data-lang="ru">Ещё 5 активных → VIP (1.5% lifetime, +0.5%)</span>
+                <span class="lang-content" data-lang="en">5 more active refs → VIP (1.5% lifetime, +0.5%)</span>
+              </div>
+            </div>
+
+            <!-- Speed Bonus progress (DEVILS pattern) -->
+            <div style="background:linear-gradient(135deg,rgba(245,166,35,0.15) 0%,rgba(249,115,22,0.05) 100%);border:1px solid rgba(245,166,35,0.4);border-radius:12px;padding:14px;margin-bottom:16px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                <span style="font-size:11px;color:#f5a623;font-weight:700;letter-spacing:1px">
+                  ⚡ <span class="lang-content active lc-inline" data-lang="vi">SPEED BONUS</span><span class="lang-content lc-inline" data-lang="ru">SPEED БОНУС</span><span class="lang-content lc-inline" data-lang="en">SPEED BONUS</span>
+                </span>
+                <span style="font-size:11px;color:var(--tg-text-secondary)">
+                  <span class="lang-content active" data-lang="vi">Còn 47 ngày</span>
+                  <span class="lang-content" data-lang="ru">Осталось 47 дней</span>
+                  <span class="lang-content" data-lang="en">47 days left</span>
+                </span>
+              </div>
+              <div style="height:8px;background:rgba(0,0,0,0.3);border-radius:4px;overflow:hidden;margin-bottom:6px">
+                <div style="height:100%;background:linear-gradient(90deg,#f5a623,#f97316);width:60%;border-radius:4px"></div>
+              </div>
+              <div style="font-size:11px;color:var(--tg-text-secondary);line-height:1.6">
+                <span class="lang-content active" data-lang="vi">3/5 active trong 90 ngày · còn 2 ref → unlock <b style="color:#f5a623">$1,000 cash</b></span>
+                <span class="lang-content" data-lang="ru">3/5 актив за 90 дней · ещё 2 рефа → <b style="color:#f5a623">$1,000 кэш</b></span>
+                <span class="lang-content" data-lang="en">3/5 active in 90 days · 2 more refs → unlock <b style="color:#f5a623">$1,000 cash</b></span>
+              </div>
+            </div>
+
+            <!-- Stat grid 2x2 -->
+            <div class="stat-grid">
+              <div class="stat-card">
+                <div class="icon">🎯</div>
+                <div class="label">
+                  <span class="lang-content active" data-lang="vi">Ref active</span>
+                  <span class="lang-content" data-lang="ru">Активных</span>
+                  <span class="lang-content" data-lang="en">Active refs</span>
+                </div>
+                <div class="value">5</div>
+              </div>
+              <div class="stat-card">
+                <div class="icon">👥</div>
+                <div class="label">
+                  <span class="lang-content active" data-lang="vi">Tổng đã ref</span>
+                  <span class="lang-content" data-lang="ru">Всего рефов</span>
+                  <span class="lang-content" data-lang="en">Total referred</span>
+                </div>
+                <div class="value">7</div>
+              </div>
+              <div class="stat-card">
+                <div class="icon">💸</div>
+                <div class="label">
+                  <span class="lang-content active" data-lang="vi">Đã rút</span>
+                  <span class="lang-content" data-lang="ru">Выведено</span>
+                  <span class="lang-content" data-lang="en">Withdrawn</span>
+                </div>
+                <div class="value">$2,807</div>
+              </div>
+              <div class="stat-card">
+                <div class="icon">📈</div>
+                <div class="label">
+                  <span class="lang-content active" data-lang="vi">Spend network</span>
+                  <span class="lang-content" data-lang="ru">Спенд сети</span>
+                  <span class="lang-content" data-lang="en">Network spend</span>
+                </div>
+                <div class="value">$62K</div>
+              </div>
+            </div>
+
+            <!-- Activity Feed (Hamster Kombat pattern) -->
+            <div class="activity-section">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                <span style="font-size:11px;color:var(--brand-orange);font-weight:700;letter-spacing:1px">
+                  <span class="live-dot"></span>
+                  <span class="lang-content active lc-inline" data-lang="vi">HOẠT ĐỘNG MẠNG LƯỚI</span>
+                  <span class="lang-content lc-inline" data-lang="ru">АКТИВНОСТЬ СЕТИ</span>
+                  <span class="lang-content lc-inline" data-lang="en">NETWORK ACTIVITY</span>
+                </span>
+                <span style="font-size:10px;color:var(--tg-text-hint)">LIVE</span>
+              </div>
+              <div class="activity-row">
+                <div class="activity-icon" style="background:rgba(76,175,80,0.2)">💰</div>
+                <div class="activity-text">
+                  <span class="lang-content active" data-lang="vi"><b>@buyer_alpha</b> spend $500</span>
+                  <span class="lang-content" data-lang="ru"><b>@buyer_alpha</b> потратил $500</span>
+                  <span class="lang-content" data-lang="en"><b>@buyer_alpha</b> spent $500</span>
+                </div>
+                <div class="activity-amount">+$5</div>
+                <div class="activity-time">2m</div>
+              </div>
+              <div class="activity-row">
+                <div class="activity-icon" style="background:rgba(98,177,235,0.2)">👤</div>
+                <div class="activity-text">
+                  <span class="lang-content active" data-lang="vi"><b>@new_lead</b> đăng ký mới</span>
+                  <span class="lang-content" data-lang="ru"><b>@new_lead</b> зарегистрирован</span>
+                  <span class="lang-content" data-lang="en"><b>@new_lead</b> signed up</span>
+                </div>
+                <div class="activity-amount" style="color:var(--tg-link)">tracking</div>
+                <div class="activity-time">15m</div>
+              </div>
+              <div class="activity-row">
+                <div class="activity-icon" style="background:rgba(249,115,22,0.2)">🎉</div>
+                <div class="activity-text">
+                  <span class="lang-content active" data-lang="vi"><b>@team_beta</b> converted ($600)</span>
+                  <span class="lang-content" data-lang="ru"><b>@team_beta</b> конверсия ($600)</span>
+                  <span class="lang-content" data-lang="en"><b>@team_beta</b> converted ($600)</span>
+                </div>
+                <div class="activity-amount">+$6</div>
+                <div class="activity-time">1h</div>
+              </div>
+              <div class="activity-row">
+                <div class="activity-icon" style="background:rgba(245,166,35,0.2)">⚡</div>
+                <div class="activity-text">
+                  <span class="lang-content active" data-lang="vi"><b>@kol_gamma</b> spend $300</span>
+                  <span class="lang-content" data-lang="ru"><b>@kol_gamma</b> потратил $300</span>
+                  <span class="lang-content" data-lang="en"><b>@kol_gamma</b> spent $300</span>
+                </div>
+                <div class="activity-amount">+$3</div>
+                <div class="activity-time">3h</div>
+              </div>
+            </div>
+
+            <!-- Ref link -->
+            <div class="ref-link-card">
+              <div class="label">🔗
+                <span class="lang-content active lc-inline" data-lang="vi">LINK GIỚI THIỆU CỦA BẠN</span>
+                <span class="lang-content lc-inline" data-lang="ru">ВАША РЕФ-ССЫЛКА</span>
+                <span class="lang-content lc-inline" data-lang="en">YOUR REF LINK</span>
+              </div>
+              <div class="link">https://t.me/funagency_bot?start=ref_605331591</div>
+              <div class="actions">
+                <button>📋
+                  <span class="lang-content active lc-inline" data-lang="vi">Copy</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Копир.</span>
+                  <span class="lang-content lc-inline" data-lang="en">Copy</span>
+                </button>
+                <button>📤
+                  <span class="lang-content active lc-inline" data-lang="vi">Share</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Поделиться</span>
+                  <span class="lang-content lc-inline" data-lang="en">Share</span>
+                </button>
+                <button>📱 QR</button>
+              </div>
+            </div>
+
+            <!-- Quick actions -->
+            <div class="action-row">
+              <div class="action-card">
+                <div class="icon">💸</div>
+                <div class="label">
+                  <span class="lang-content active" data-lang="vi">Rút tiền</span>
+                  <span class="lang-content" data-lang="ru">Вывод</span>
+                  <span class="lang-content" data-lang="en">Withdraw</span>
+                </div>
+              </div>
+              <div class="action-card">
+                <div class="icon">🌐</div>
+                <div class="label">
+                  <span class="lang-content active" data-lang="vi">Mạng lưới</span>
+                  <span class="lang-content" data-lang="ru">Сеть</span>
+                  <span class="lang-content" data-lang="en">Network</span>
+                </div>
+              </div>
+            </div>
+
+            <button class="main-button">
+              🚀
+              <span class="lang-content active lc-inline" data-lang="vi">Mời thêm ref</span>
+              <span class="lang-content lc-inline" data-lang="ru">Пригласить рефов</span>
+              <span class="lang-content lc-inline" data-lang="en">Invite more refs</span>
+            </button>
+
+            <!-- Native TG Share (TG Wallet pattern) -->
+            <button class="tg-share-btn" onclick="tgNativeShare()">
+              📤 <span class="lang-content active lc-inline" data-lang="vi">Share trực tiếp lên Telegram</span>
+              <span class="lang-content lc-inline" data-lang="ru">Поделиться через Telegram</span>
+              <span class="lang-content lc-inline" data-lang="en">Share via Telegram natively</span>
+            </button>
+
+            <!-- Activation rule -->
+            <div style="margin-top:14px;padding:12px;background:rgba(255,152,0,0.08);border:1px solid rgba(255,152,0,0.3);border-radius:10px;font-size:11px;line-height:1.5;color:var(--tg-text-secondary)">
+              ℹ️ <b style="color:var(--warning)">
+                <span class="lang-content active lc-inline" data-lang="vi">ĐIỀU KIỆN TÍNH HOA HỒNG</span>
+                <span class="lang-content lc-inline" data-lang="ru">УСЛОВИЯ КОМИССИИ</span>
+                <span class="lang-content lc-inline" data-lang="en">COMMISSION REQUIREMENTS</span>
+              </b><br>
+              <span class="lang-content active" data-lang="vi">▸ Ref phải spend ≥ <b>$10,000</b> VÀ active ≥ <b>2 tháng</b><br>▸ Hoa hồng locked <b>14 ngày</b> (anti-fraud)<br>▸ Chargeback → claw-back tỷ lệ tương ứng</span>
+              <span class="lang-content" data-lang="ru">▸ Реферал ≥ <b>$10,000</b> И активен ≥ <b>2 мес</b><br>▸ Холд <b>14 дней</b> (anti-fraud)<br>▸ Чарджбэк → claw-back пропорционально</span>
+              <span class="lang-content" data-lang="en">▸ Ref ≥ <b>$10,000</b> AND active ≥ <b>2 months</b><br>▸ Lock <b>14 days</b> (anti-fraud)<br>▸ Chargeback → proportional claw-back</span>
+            </div>
+          </div>
+
+          <!-- NETWORK SCENARIO -->
+          <div class="scenario-content" data-scenario="network">
+            <div class="section-title">
+              <span class="lang-content active" data-lang="vi">🌳 MẠNG LƯỚI GIỚI THIỆU</span>
+              <span class="lang-content" data-lang="ru">🌳 РЕФЕРАЛЬНАЯ СЕТЬ</span>
+              <span class="lang-content" data-lang="en">🌳 REFERRAL NETWORK</span>
+            </div>
+
+            <!-- Network toolbar (NEW: search + filter + sort, scales for 100+ refs) -->
+            <div class="net-toolbar">
+              <div class="net-search-wrap">
+                <input id="netSearch" type="text" placeholder="@username, $amount, tier…" oninput="filterNetwork()">
+              </div>
+              <div class="net-filter-chips" id="netFilterChips">
+                <button class="filter-chip active" data-filter="all">
+                  <span class="lang-content active lc-inline" data-lang="vi">Tất cả</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Все</span>
+                  <span class="lang-content lc-inline" data-lang="en">All</span>
+                  <span id="cntAll">· 7</span>
+                </button>
+                <button class="filter-chip" data-filter="active">
+                  🟢 <span class="lang-content active lc-inline" data-lang="vi">Active</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Актив</span>
+                  <span class="lang-content lc-inline" data-lang="en">Active</span>
+                  <span id="cntActive">· 5</span>
+                </button>
+                <button class="filter-chip" data-filter="inactive">
+                  ⚪ <span class="lang-content active lc-inline" data-lang="vi">Inactive</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Неактив</span>
+                  <span class="lang-content lc-inline" data-lang="en">Inactive</span>
+                  <span id="cntInactive">· 2</span>
+                </button>
+                <button class="filter-chip" data-filter="top">
+                  🏆 <span class="lang-content active lc-inline" data-lang="vi">Top earner</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Топ</span>
+                  <span class="lang-content lc-inline" data-lang="en">Top</span>
+                </button>
+                <button class="filter-chip" data-filter="new">
+                  ✨ <span class="lang-content active lc-inline" data-lang="vi">Mới (30d)</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Новые (30d)</span>
+                  <span class="lang-content lc-inline" data-lang="en">New (30d)</span>
+                </button>
+                <button class="filter-chip" data-filter="risk">
+                  ⚠️ <span class="lang-content active lc-inline" data-lang="vi">Sắp drop</span>
+                  <span class="lang-content lc-inline" data-lang="ru">К дропу</span>
+                  <span class="lang-content lc-inline" data-lang="en">At risk</span>
+                </button>
+              </div>
+            </div>
+            <div class="net-meta">
+              <span id="netResultCount">
+                <span class="lang-content active lc-inline" data-lang="vi">Hiển thị 7 / 7 ref</span>
+                <span class="lang-content lc-inline" data-lang="ru">Показано 7 / 7</span>
+                <span class="lang-content lc-inline" data-lang="en">Showing 7 / 7 refs</span>
+              </span>
+              <button class="net-sort-btn" onclick="cycleSort()">
+                <span id="netSortLabel">↓ $ earnings</span>
+              </button>
+            </div>
+
+            <!-- You node -->
+            <div class="tree-node you">
+              <div class="lvl-badge lvl-you">YOU</div>
+              <div class="tree-info">
+                <div class="name">@your_username</div>
+                <div class="sub">
+                  <span class="lang-content active" data-lang="vi">Tổng: $620/tháng · Growth tier</span>
+                  <span class="lang-content" data-lang="ru">Всего: $620/мес · Growth tier</span>
+                  <span class="lang-content" data-lang="en">Total: $620/mo · Growth tier</span>
+                </div>
+              </div>
+              <div class="tree-amount">$620</div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="section-title">
+              <span class="lang-content active" data-lang="vi">REF CỦA BẠN · 7 ACTIVE</span>
+              <span class="lang-content" data-lang="ru">ВАШИ РЕФЕРАЛЫ · 7 ACTIVE</span>
+              <span class="lang-content" data-lang="en">YOUR DIRECT REFERRALS · 7 ACTIVE</span>
+            </div>
+
+            <!-- Direct refs -->
+            <div class="tree-node">
+              <div class="lvl-badge lvl-l1">★</div>
+              <div class="tree-info">
+                <div class="name">@buyer_alpha</div>
+                <div class="sub">
+                  <span class="lang-content active" data-lang="vi">$20K · 🥇 Premium 6% · từ 11/2025</span>
+                  <span class="lang-content" data-lang="ru">$20K · 🥇 Premium 6% · с 11.2025</span>
+                  <span class="lang-content" data-lang="en">$20K · 🥇 Premium 6% · since Nov 2025</span>
+                </div>
+              </div>
+              <div class="tree-amount">$200</div>
+            </div>
+            <div class="tree-node">
+              <div class="lvl-badge lvl-l1">★</div>
+              <div class="tree-info">
+                <div class="name">@team_beta</div>
+                <div class="sub">
+                  <span class="lang-content active" data-lang="vi">$15K · 🥈 Priority 5% · từ 12/2025</span>
+                  <span class="lang-content" data-lang="ru">$15K · 🥈 Priority 5% · с 12.2025</span>
+                  <span class="lang-content" data-lang="en">$15K · 🥈 Priority 5% · since Dec 2025</span>
+                </div>
+              </div>
+              <div class="tree-amount">$150</div>
+            </div>
+            <div class="tree-node">
+              <div class="lvl-badge lvl-l1">★</div>
+              <div class="tree-info">
+                <div class="name">@kol_gamma</div>
+                <div class="sub">
+                  <span class="lang-content active" data-lang="vi">$12K · 🥉 Standard 4% · từ 1/2026</span>
+                  <span class="lang-content" data-lang="ru">$12K · 🥉 Standard 4% · с 01.2026</span>
+                  <span class="lang-content" data-lang="en">$12K · 🥉 Standard 4% · since Jan 2026</span>
+                </div>
+              </div>
+              <div class="tree-amount">$120</div>
+            </div>
+            <div class="tree-node">
+              <div class="lvl-badge lvl-l1">★</div>
+              <div class="tree-info">
+                <div class="name">@media_delta</div>
+                <div class="sub">
+                  <span class="lang-content active" data-lang="vi">$8K · 🥉 Standard 4% · từ 2/2026</span>
+                  <span class="lang-content" data-lang="ru">$8K · 🥉 Standard 4% · с 02.2026</span>
+                  <span class="lang-content" data-lang="en">$8K · 🥉 Standard 4% · since Feb 2026</span>
+                </div>
+              </div>
+              <div class="tree-amount">$80</div>
+            </div>
+            <div class="tree-node">
+              <div class="lvl-badge lvl-l1">★</div>
+              <div class="tree-info">
+                <div class="name">@arbi_epsilon</div>
+                <div class="sub">
+                  <span class="lang-content active" data-lang="vi">$7K · 💎 White Glove 7% · từ 3/2026</span>
+                  <span class="lang-content" data-lang="ru">$7K · 💎 White Glove 7% · с 03.2026</span>
+                  <span class="lang-content" data-lang="en">$7K · 💎 White Glove 7% · since Mar 2026</span>
+                </div>
+              </div>
+              <div class="tree-amount">$70</div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="section-title">
+              <span class="lang-content active" data-lang="vi">⚠️ KHÔNG ACTIVE THÁNG NÀY</span>
+              <span class="lang-content" data-lang="ru">⚠️ НЕ АКТИВНЫ В ЭТОМ МЕС</span>
+              <span class="lang-content" data-lang="en">⚠️ INACTIVE THIS MONTH</span>
+            </div>
+
+            <div class="tree-node" style="opacity: 0.5">
+              <div class="lvl-badge" style="background:rgba(255,255,255,0.1);color:var(--tg-text-secondary)">—</div>
+              <div class="tree-info">
+                <div class="name">@drop_zeta</div>
+                <div class="sub">
+                  <span class="lang-content active" data-lang="vi">Tạm dừng chạy ads</span>
+                  <span class="lang-content" data-lang="ru">Приостановил кампании</span>
+                  <span class="lang-content" data-lang="en">Paused campaigns</span>
+                </div>
+              </div>
+              <div class="tree-amount" style="color:var(--tg-text-secondary)">—</div>
+            </div>
+            <div class="tree-node" style="opacity: 0.5">
+              <div class="lvl-badge" style="background:rgba(255,255,255,0.1);color:var(--tg-text-secondary)">—</div>
+              <div class="tree-info">
+                <div class="name">@perf_eta</div>
+                <div class="sub">
+                  <span class="lang-content active" data-lang="vi">Đăng ký xong, chưa top-up</span>
+                  <span class="lang-content" data-lang="ru">Зарегистрирован, не пополнил</span>
+                  <span class="lang-content" data-lang="en">Signed up, not funded yet</span>
+                </div>
+              </div>
+              <div class="tree-amount" style="color:var(--tg-text-secondary)">—</div>
+            </div>
+
+            <!-- Load More (NEW: pagination for 100+ refs) -->
+            <button class="load-more-btn" id="loadMoreBtn" onclick="loadMoreRefs()">
+              📥 <span class="lang-content active lc-inline" data-lang="vi">Tải thêm 20 ref</span>
+              <span class="lang-content lc-inline" data-lang="ru">Загрузить ещё 20</span>
+              <span class="lang-content lc-inline" data-lang="en">Load 20 more refs</span>
+            </button>
+            <div class="net-page-indicator">
+              <span class="lang-content active" data-lang="vi">Đang xem 7 / <b>127 tổng</b> · Trang 1 / 7</span>
+              <span class="lang-content" data-lang="ru">7 / <b>127 всего</b> · Страница 1 / 7</span>
+              <span class="lang-content" data-lang="en">Showing 7 / <b>127 total</b> · Page 1 / 7</span>
+            </div>
+
+            <div style="text-align:center;margin-top:14px;font-size:11px;color:var(--tg-text-hint)">
+              <span class="lang-content active" data-lang="vi">💡 Hoa hồng = 1% lifetime spend mỗi ref. Ref dừng chạy → bạn dừng nhận. Ref quay lại → bạn nhận lại.</span>
+              <span class="lang-content" data-lang="ru">💡 Комиссия = 1% lifetime от спенда. Стоп трафика → стоп ревшары. Возобновит → продолжишь получать.</span>
+              <span class="lang-content" data-lang="en">💡 Commission = 1% lifetime spend per client. Stops traffic → revshare stops. Resumes → revshare resumes.</span>
+            </div>
+          </div>
+
+          <!-- STATS SCENARIO -->
+          <div class="scenario-content" data-scenario="stats">
+            <div class="section-title">
+              <span class="lang-content active" data-lang="vi">📊 BIỂU ĐỒ 6 THÁNG</span>
+              <span class="lang-content" data-lang="ru">📊 ГРАФИК 6 МЕС</span>
+              <span class="lang-content" data-lang="en">📊 6-MONTH CHART</span>
+            </div>
+
+            <div class="chart-card">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+                <div>
+                  <div style="font-size:11px;color:var(--tg-text-secondary)">Total earned</div>
+                  <div style="font-size:24px;font-weight:800">$2,807</div>
+                </div>
+                <div style="font-size:11px;color:var(--success);font-weight:600">↑ 38% MoM</div>
+              </div>
+              <div class="chart-bars">
+                <div class="chart-bar" style="height: 30%"></div>
+                <div class="chart-bar" style="height: 45%"></div>
+                <div class="chart-bar" style="height: 55%"></div>
+                <div class="chart-bar" style="height: 65%"></div>
+                <div class="chart-bar" style="height: 78%"></div>
+                <div class="chart-bar now" style="height: 100%"></div>
+              </div>
+              <div class="chart-labels">
+                <span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span>
+              </div>
+            </div>
+
+            <!-- ====== MOVED FROM HOME ====== -->
+
+            <!-- Monthly Prize Pool (Catizen pattern) -->
+            <div class="prize-pool">
+              <div class="prize-row">
+                <span class="prize-pool-title">🏆
+                  <span class="lang-content active lc-inline" data-lang="vi">PRIZE POOL THÁNG 5 · $9,000</span>
+                  <span class="lang-content lc-inline" data-lang="ru">ПРИЗ-ФОНД МАЙ · $9,000</span>
+                  <span class="lang-content lc-inline" data-lang="en">MAY PRIZE POOL · $9,000</span>
+                </span>
+                <span class="prize-countdown">⏱ 13d 4h</span>
+              </div>
+              <div class="prize-rankings">
+                <div class="prize-rank-row">
+                  <span class="prize-medal">🥇</span>
+                  <span class="prize-name">@whale_***er</span>
+                  <span class="prize-amount">$5,000</span>
+                </div>
+                <div class="prize-rank-row">
+                  <span class="prize-medal">🥈</span>
+                  <span class="prize-name">@kol_v***</span>
+                  <span class="prize-amount">$3,000</span>
+                </div>
+                <div class="prize-rank-row">
+                  <span class="prize-medal">🥉</span>
+                  <span class="prize-name">@team_le***</span>
+                  <span class="prize-amount">$1,000</span>
+                </div>
+                <div class="prize-rank-row you">
+                  <span class="prize-medal">#7</span>
+                  <span class="prize-name">
+                    <span class="lang-content active lc-inline" data-lang="vi">YOU · còn 4 hạng để top 3</span>
+                    <span class="lang-content lc-inline" data-lang="ru">YOU · 4 места до топ-3</span>
+                    <span class="lang-content lc-inline" data-lang="en">YOU · 4 ranks to top 3</span>
+                  </span>
+                  <span class="prize-amount">—</span>
+                </div>
+              </div>
+              <div style="font-size:10px;color:var(--tg-text-hint);text-align:center;margin-top:8px">
+                <span class="lang-content active" data-lang="vi">💡 Pool tài trợ bởi FunAgency · Top 3 nhận cash đầu tháng kế</span>
+                <span class="lang-content" data-lang="ru">💡 Фонд от FunAgency · Топ-3 получают кэш в начале мес</span>
+                <span class="lang-content" data-lang="en">💡 Funded by FunAgency · Top 3 get cash next month</span>
+              </div>
+            </div>
+
+            <!-- Squad System (Notcoin/Blum pattern) -->
+            <div class="squad-card">
+              <div class="squad-header">
+                <span class="squad-title">👥
+                  <span class="lang-content active lc-inline" data-lang="vi">SQUAD CỦA BẠN · 3/5</span>
+                  <span class="lang-content lc-inline" data-lang="ru">ТВОЯ СКУАДА · 3/5</span>
+                  <span class="lang-content lc-inline" data-lang="en">YOUR SQUAD · 3/5</span>
+                </span>
+                <span style="font-size:10px;color:var(--success);font-weight:600">+10% bonus</span>
+              </div>
+              <div class="squad-members">
+                <div class="squad-avatar leader" title="You (leader)">YU</div>
+                <div class="squad-avatar" title="@buyer_alpha">BA</div>
+                <div class="squad-avatar" title="@team_beta">TB</div>
+                <div class="squad-avatar empty" title="Open slot">+</div>
+                <div class="squad-avatar empty" title="Open slot">+</div>
+              </div>
+              <div class="squad-bonus">
+                ⚡ <span class="lang-content active lc-inline" data-lang="vi">Squad earnings tháng này: +$62 (10% × $620)</span>
+                <span class="lang-content lc-inline" data-lang="ru">Squad доход в мес: +$62 (10% × $620)</span>
+                <span class="lang-content lc-inline" data-lang="en">Squad earnings this mo: +$62 (10% × $620)</span>
+              </div>
+              <div style="font-size:10px;color:var(--tg-text-hint);margin-top:6px">
+                <span class="lang-content active" data-lang="vi">Mời thêm 2 ref vào squad → unlock +15% bonus</span>
+                <span class="lang-content" data-lang="ru">Пригласить ещё 2 → +15% бонус</span>
+                <span class="lang-content" data-lang="en">Invite 2 more → unlock +15% bonus</span>
+              </div>
+            </div>
+
+            <div class="section-title">
+              <span class="lang-content active" data-lang="vi">🏆 TOP 10 THÁNG NÀY</span>
+              <span class="lang-content" data-lang="ru">🏆 ТОП 10 МЕСЯЦА</span>
+              <span class="lang-content" data-lang="en">🏆 TOP 10 THIS MONTH</span>
+            </div>
+
+            <div class="lb-row">
+              <div class="lb-rank gold">1</div>
+              <div class="lb-info">
+                <div class="name">@whale_***er</div>
+                <div class="sub">38 refs · VIP tier</div>
+              </div>
+              <div class="lb-amount">$4,760</div>
+            </div>
+            <div class="lb-row">
+              <div class="lb-rank silver">2</div>
+              <div class="lb-info">
+                <div class="name">@kol_v***</div>
+                <div class="sub">29 refs · VIP</div>
+              </div>
+              <div class="lb-amount">$3,283</div>
+            </div>
+            <div class="lb-row">
+              <div class="lb-rank bronze">3</div>
+              <div class="lb-info">
+                <div class="name">@team_le***</div>
+                <div class="sub">22 refs · VIP</div>
+              </div>
+              <div class="lb-amount">$2,373</div>
+            </div>
+            <div class="lb-row">
+              <div class="lb-rank">4</div>
+              <div class="lb-info">
+                <div class="name">@buyer_***x</div>
+                <div class="sub">18 refs · Growth</div>
+              </div>
+              <div class="lb-amount">$620</div>
+            </div>
+            <div class="lb-row you">
+              <div class="lb-rank">7</div>
+              <div class="lb-info">
+                <div class="name">
+                  <span class="lang-content active lc-inline" data-lang="vi">@bạn (YOU)</span>
+                  <span class="lang-content lc-inline" data-lang="ru">@вы (YOU)</span>
+                  <span class="lang-content lc-inline" data-lang="en">@you (YOU)</span>
+                </div>
+                <div class="sub">23 refs · Growth</div>
+              </div>
+              <div class="lb-amount">$620</div>
+            </div>
+            <div class="lb-row">
+              <div class="lb-rank">8</div>
+              <div class="lb-info">
+                <div class="name">@dropship_***</div>
+                <div class="sub">15 refs · Growth</div>
+              </div>
+              <div class="lb-amount">$573</div>
+            </div>
+
+            <!-- Achievement Badges (MOVED from Home — Stats tab) -->
+            <div class="section-title" style="margin-top:18px">
+              🏆
+              <span class="lang-content active lc-inline" data-lang="vi">THÀNH TÍCH · 4/12</span>
+              <span class="lang-content lc-inline" data-lang="ru">ДОСТИЖЕНИЯ · 4/12</span>
+              <span class="lang-content lc-inline" data-lang="en">ACHIEVEMENTS · 4/12</span>
+            </div>
+            <div class="achievements">
+              <div class="badge-grid">
+                <div class="badge unlocked" title="First Ref"><div class="badge-emoji">🌱</div><div class="badge-label">First Ref</div></div>
+                <div class="badge unlocked" title="$100 earned"><div class="badge-emoji">💰</div><div class="badge-label">$100</div></div>
+                <div class="badge unlocked" title="$1K earned"><div class="badge-emoji">🚀</div><div class="badge-label">$1K</div></div>
+                <div class="badge unlocked" title="Speed Bonus +$300"><div class="badge-emoji">⚡</div><div class="badge-label">Speed +$300</div></div>
+                <div class="badge locked" title="VIP tier"><div class="badge-emoji">🥇</div><div class="badge-label">VIP tier</div></div>
+                <div class="badge locked" title="$10K earned"><div class="badge-emoji">💎</div><div class="badge-label">$10K</div></div>
+                <div class="badge locked" title="100 ref milestone"><div class="badge-emoji">🌟</div><div class="badge-label">100 refs</div></div>
+                <div class="badge locked" title="$100K spend"><div class="badge-emoji">🎯</div><div class="badge-label">$100K</div></div>
+                <div class="badge locked" title="Squad Master 5/5"><div class="badge-emoji">👑</div><div class="badge-label">Squad full</div></div>
+                <div class="badge locked" title="Volume Bonus $1K"><div class="badge-emoji">🔥</div><div class="badge-label">Volume $1K</div></div>
+                <div class="badge locked" title="Top 3 Prize Pool"><div class="badge-emoji">🏅</div><div class="badge-label">Top 3</div></div>
+                <div class="badge locked" title="6-month retention"><div class="badge-emoji">🛡️</div><div class="badge-label">Loyal 6mo</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- WALLET SCENARIO -->
+          <div class="scenario-content" data-scenario="wallet">
+            <div class="stat-hero">
+              <div class="label">
+                <span class="lang-content active" data-lang="vi">SỐ DƯ KHẢ DỤNG</span>
+                <span class="lang-content" data-lang="ru">ДОСТУПНЫЙ БАЛАНС</span>
+                <span class="lang-content" data-lang="en">AVAILABLE BALANCE</span>
+              </div>
+              <div class="value">$204.50</div>
+              <div class="sub">
+                + <span style="color:var(--warning)">$89.00</span>
+                <span class="lang-content active lc-inline" data-lang="vi"> đang hold (14 ngày)</span>
+                <span class="lang-content lc-inline" data-lang="ru"> в холде (14 дней)</span>
+                <span class="lang-content lc-inline" data-lang="en"> on hold (14 days)</span>
+              </div>
+            </div>
+
+            <button class="main-button">
+              💸
+              <span class="lang-content active lc-inline" data-lang="vi">Rút $204.50</span>
+              <span class="lang-content lc-inline" data-lang="ru">Вывести $204.50</span>
+              <span class="lang-content lc-inline" data-lang="en">Withdraw $204.50</span>
+            </button>
+
+            <!-- YTD Stats (NEW) -->
+            <div class="section-title" style="margin-top:18px">
+              📈
+              <span class="lang-content active lc-inline" data-lang="vi">TỔNG KẾT 2026</span>
+              <span class="lang-content lc-inline" data-lang="ru">ИТОГО 2026</span>
+              <span class="lang-content lc-inline" data-lang="en">YTD 2026</span>
+            </div>
+            <div class="ytd-stats">
+              <div class="ytd-card">
+                <div class="ytd-label">
+                  <span class="lang-content active lc-inline" data-lang="vi">TỔNG NHẬN</span>
+                  <span class="lang-content lc-inline" data-lang="ru">ВСЕГО ДОХОД</span>
+                  <span class="lang-content lc-inline" data-lang="en">TOTAL EARNED</span>
+                </div>
+                <div class="ytd-value" style="color:var(--success)">$3,011.50</div>
+                <div class="ytd-trend up">↑ 38% vs Q1</div>
+              </div>
+              <div class="ytd-card">
+                <div class="ytd-label">
+                  <span class="lang-content active lc-inline" data-lang="vi">ĐÃ RÚT</span>
+                  <span class="lang-content lc-inline" data-lang="ru">ВЫВЕДЕНО</span>
+                  <span class="lang-content lc-inline" data-lang="en">WITHDRAWN</span>
+                </div>
+                <div class="ytd-value">$2,807.00</div>
+                <div class="ytd-trend">5
+                  <span class="lang-content active lc-inline" data-lang="vi">lần rút</span>
+                  <span class="lang-content lc-inline" data-lang="ru">выводов</span>
+                  <span class="lang-content lc-inline" data-lang="en">withdraws</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Export buttons (NEW) -->
+            <div class="export-row">
+              <button class="export-btn" onclick="alert('📄 Demo: Export PDF for tax (Q4 2026)')">
+                📄 Export PDF
+              </button>
+              <button class="export-btn" onclick="alert('📊 Demo: Export CSV with all TX')">
+                📊 Export CSV
+              </button>
+              <button class="export-btn" onclick="alert('📧 Demo: Email TX history to your inbox')">
+                📧 Email
+              </button>
+            </div>
+
+            <div class="section-title" style="margin-top: 18px">
+              <span class="lang-content active" data-lang="vi">📜 LỊCH SỬ GIAO DỊCH</span>
+              <span class="lang-content" data-lang="ru">📜 ИСТОРИЯ ТРАНЗАКЦИЙ</span>
+              <span class="lang-content" data-lang="en">📜 TRANSACTION HISTORY</span>
+            </div>
+
+            <!-- Filter chips (NEW) -->
+            <div class="filter-chips">
+              <button class="filter-chip active">
+                <span class="lang-content active lc-inline" data-lang="vi">Tất cả</span>
+                <span class="lang-content lc-inline" data-lang="ru">Все</span>
+                <span class="lang-content lc-inline" data-lang="en">All</span>
+              </button>
+              <button class="filter-chip">
+                💰 <span class="lang-content active lc-inline" data-lang="vi">Hoa hồng</span>
+                <span class="lang-content lc-inline" data-lang="ru">Комиссия</span>
+                <span class="lang-content lc-inline" data-lang="en">Commission</span>
+              </button>
+              <button class="filter-chip">
+                💸 <span class="lang-content active lc-inline" data-lang="vi">Rút tiền</span>
+                <span class="lang-content lc-inline" data-lang="ru">Вывод</span>
+                <span class="lang-content lc-inline" data-lang="en">Withdraw</span>
+              </button>
+              <button class="filter-chip">
+                ⏳ <span class="lang-content active lc-inline" data-lang="vi">Pending</span>
+                <span class="lang-content lc-inline" data-lang="ru">Холд</span>
+                <span class="lang-content lc-inline" data-lang="en">Pending</span>
+              </button>
+            </div>
+
+            <div class="tx-row">
+              <div class="tx-info">
+                <div class="title">
+                  <span class="lang-content active" data-lang="vi">Hoa hồng — @buyer_alpha</span>
+                  <span class="lang-content" data-lang="ru">Комиссия — @buyer_alpha</span>
+                  <span class="lang-content" data-lang="en">Commission — @buyer_alpha</span>
+                </div>
+                <div class="date">02 May, 11:18 · 1% × $20K</div>
+              </div>
+              <div>
+                <span class="tx-amount in">+$200.00</span>
+                <span class="tx-status done">✓</span>
+              </div>
+            </div>
+
+            <div class="tx-row">
+              <div class="tx-info">
+                <div class="title">
+                  <span class="lang-content active" data-lang="vi">Hoa hồng — @team_beta</span>
+                  <span class="lang-content" data-lang="ru">Комиссия — @team_beta</span>
+                  <span class="lang-content" data-lang="en">Commission — @team_beta</span>
+                </div>
+                <div class="date">28 Apr, 09:42</div>
+              </div>
+              <div>
+                <span class="tx-amount in">+$200.00</span>
+                <span class="tx-status done">✓</span>
+              </div>
+            </div>
+
+            <div class="tx-row">
+              <div class="tx-info">
+                <div class="title">
+                  <span class="lang-content active" data-lang="vi">Rút USDT TRC20</span>
+                  <span class="lang-content" data-lang="ru">Вывод USDT TRC20</span>
+                  <span class="lang-content" data-lang="en">Withdraw USDT TRC20</span>
+                </div>
+                <div class="date">25 Apr, 18:00 · TX:#29481</div>
+              </div>
+              <div>
+                <span class="tx-amount out">-$411.50</span>
+                <span class="tx-status done">✓</span>
+              </div>
+            </div>
+
+            <div class="tx-row">
+              <div class="tx-info">
+                <div class="title">
+                  <span class="lang-content active" data-lang="vi">Hoa hồng — @media_delta</span>
+                  <span class="lang-content" data-lang="ru">Комиссия — @media_delta</span>
+                  <span class="lang-content" data-lang="en">Commission — @media_delta</span>
+                </div>
+                <div class="date">22 Apr, 14:30 · 1% × $8K</div>
+              </div>
+              <div>
+                <span class="tx-amount in">+$80.00</span>
+                <span class="tx-status pending">⏳</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- WITHDRAW SCENARIO -->
+          <div class="scenario-content" data-scenario="withdraw">
+            <div class="section-title">
+              💸
+              <span class="lang-content active lc-inline" data-lang="vi">YÊU CẦU RÚT TIỀN</span>
+              <span class="lang-content lc-inline" data-lang="ru">ЗАПРОС ВЫПЛАТЫ</span>
+              <span class="lang-content lc-inline" data-lang="en">WITHDRAW REQUEST</span>
+            </div>
+
+            <div class="stat-hero">
+              <div class="label">
+                <span class="lang-content active" data-lang="vi">CÓ THỂ RÚT</span>
+                <span class="lang-content" data-lang="ru">ДОСТУПНО</span>
+                <span class="lang-content" data-lang="en">AVAILABLE</span>
+              </div>
+              <div class="value">$204.50</div>
+              <div class="sub" style="margin-top:6px">USDT TRC20 · TRON Network</div>
+            </div>
+
+            <!-- USDT TRC20 limits panel (NEW) -->
+            <div style="background:rgba(98,177,235,0.08);border:1px solid rgba(98,177,235,0.3);border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:11px;line-height:1.7">
+              <div style="display:flex;justify-content:space-between">
+                <span style="color:var(--tg-text-secondary)">
+                  <span class="lang-content active lc-inline" data-lang="vi">Min / Max</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Мин / Макс</span>
+                  <span class="lang-content lc-inline" data-lang="en">Min / Max</span>
+                </span>
+                <span style="font-weight:600">$20 · $10,000 / day</span>
+              </div>
+              <div style="display:flex;justify-content:space-between">
+                <span style="color:var(--tg-text-secondary)">
+                  <span class="lang-content active lc-inline" data-lang="vi">Phí mạng</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Сетевая комиссия</span>
+                  <span class="lang-content lc-inline" data-lang="en">Network fee</span>
+                </span>
+                <span style="font-weight:600;color:var(--success)">~$1 USDT (TRC20)</span>
+              </div>
+              <div style="display:flex;justify-content:space-between">
+                <span style="color:var(--tg-text-secondary)">
+                  <span class="lang-content active lc-inline" data-lang="vi">Xử lý</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Обработка</span>
+                  <span class="lang-content lc-inline" data-lang="en">Processing</span>
+                </span>
+                <span style="font-weight:600">2-15 min on-chain</span>
+              </div>
+              <div style="margin-top:6px;padding-top:6px;border-top:1px dashed rgba(255,255,255,0.1);color:var(--warning)">
+                ⚠ <span class="lang-content active lc-inline" data-lang="vi">KYC bắt buộc khi rút ≥ $1,000/lần</span>
+                <span class="lang-content lc-inline" data-lang="ru">KYC при выводе ≥ $1,000</span>
+                <span class="lang-content lc-inline" data-lang="en">KYC required for ≥ $1,000/withdrawal</span>
+              </div>
+            </div>
+
+            <div class="section-title">
+              <span class="lang-content active" data-lang="vi">CHỌN SỐ TIỀN</span>
+              <span class="lang-content" data-lang="ru">ВЫБЕРИ СУММУ</span>
+              <span class="lang-content" data-lang="en">CHOOSE AMOUNT</span>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px">
+              <div class="action-card" style="padding:10px 6px"><div style="font-weight:700;font-size:13px">$100</div></div>
+              <div class="action-card" style="padding:10px 6px"><div style="font-weight:700;font-size:13px">$300</div></div>
+              <div class="action-card" style="padding:10px 6px"><div style="font-weight:700;font-size:13px">$500</div></div>
+              <div class="action-card" style="padding:10px 6px;background:rgba(249,115,22,0.2);border:1px solid var(--brand-orange)"><div style="font-weight:700;font-size:13px;color:var(--brand-orange)">MAX</div></div>
+            </div>
+
+            <input type="number" placeholder="$204.50" value="204.50" style="width:100%;background:var(--tg-bg-secondary);border:1px solid var(--border);color:white;padding:14px;border-radius:10px;font-size:18px;font-weight:700;text-align:center;font-family:monospace;margin-bottom:14px;">
+
+            <div class="section-title">
+              <span class="lang-content active" data-lang="vi">PHƯƠNG THỨC NHẬN</span>
+              <span class="lang-content" data-lang="ru">СПОСОБ ВЫПЛАТЫ</span>
+              <span class="lang-content" data-lang="en">PAYOUT METHOD</span>
+            </div>
+
+            <div class="tx-row" style="background:rgba(249,115,22,0.1);border:1px solid var(--brand-orange)">
+              <div class="tx-info">
+                <div class="title">USDT TRC20 ✓</div>
+                <div class="date">T...x9k2vN8mR</div>
+              </div>
+              <div style="font-size:11px;color:var(--success)">~$1 fee</div>
+            </div>
+            <div class="tx-row">
+              <div class="tx-info">
+                <div class="title">Wire Transfer</div>
+                <div class="date">3-5 days</div>
+              </div>
+              <div style="font-size:11px;color:var(--tg-text-secondary)">$25 fee</div>
+            </div>
+            <div class="tx-row">
+              <div class="tx-info">
+                <div class="title">Payoneer</div>
+                <div class="date">user@email.com</div>
+              </div>
+              <div style="font-size:11px;color:var(--tg-text-secondary)">2% fee</div>
+            </div>
+
+            <button class="main-button" style="margin-top:16px">
+              ✅
+              <span class="lang-content active lc-inline" data-lang="vi">Xác nhận rút $204.50</span>
+              <span class="lang-content lc-inline" data-lang="ru">Подтвердить вывод $204.50</span>
+              <span class="lang-content lc-inline" data-lang="en">Confirm withdraw $204.50</span>
+            </button>
+
+            <div style="text-align:center;font-size:11px;color:var(--tg-text-hint);margin-top:8px">
+              <span class="lang-content active" data-lang="vi">⏱ Xử lý trong 24 giờ · ID: #TX-29482</span>
+              <span class="lang-content" data-lang="ru">⏱ Обработка 24 часа · ID: #TX-29482</span>
+              <span class="lang-content" data-lang="en">⏱ Processed in 24h · ID: #TX-29482</span>
+            </div>
+
+            <!-- Recent withdrawals history (NEW) -->
+            <div class="section-title" style="margin-top:20px">
+              📜
+              <span class="lang-content active lc-inline" data-lang="vi">RÚT GẦN ĐÂY</span>
+              <span class="lang-content lc-inline" data-lang="ru">ПОСЛЕДНИЕ ВЫВОДЫ</span>
+              <span class="lang-content lc-inline" data-lang="en">RECENT WITHDRAWS</span>
+            </div>
+
+            <div class="withdraw-history-card">
+              <div class="wh-icon">✓</div>
+              <div class="wh-info">
+                <div class="wh-amount">$411.50 USDT</div>
+                <div class="wh-meta">25 Apr · TX #29481 · TRC20</div>
+              </div>
+              <div class="wh-status done">DONE</div>
+            </div>
+
+            <div class="withdraw-history-card">
+              <div class="wh-icon">✓</div>
+              <div class="wh-info">
+                <div class="wh-amount">$680.00 USDT</div>
+                <div class="wh-meta">02 Apr · TX #28392 · TRC20</div>
+              </div>
+              <div class="wh-status done">DONE</div>
+            </div>
+
+            <div class="withdraw-history-card">
+              <div class="wh-icon">✓</div>
+              <div class="wh-info">
+                <div class="wh-amount">$520.00 USDT</div>
+                <div class="wh-meta">05 Mar · TX #26741 · TRC20</div>
+              </div>
+              <div class="wh-status done">DONE</div>
+            </div>
+
+            <div class="withdraw-history-card">
+              <div class="wh-icon">✓</div>
+              <div class="wh-info">
+                <div class="wh-amount">$430.00 USDT</div>
+                <div class="wh-meta">06 Feb · TX #24503 · TRC20</div>
+              </div>
+              <div class="wh-status done">DONE</div>
+            </div>
+
+            <div class="withdraw-history-card">
+              <div class="wh-icon">✓</div>
+              <div class="wh-info">
+                <div class="wh-amount">$766.00 USDT</div>
+                <div class="wh-meta">10 Jan · TX #21987 · TRC20</div>
+              </div>
+              <div class="wh-status done">DONE</div>
+            </div>
+
+            <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--tg-link);cursor:pointer">
+              <span class="lang-content active" data-lang="vi">Xem tất cả 12 lần rút →</span>
+              <span class="lang-content" data-lang="ru">Все 12 выводов →</span>
+              <span class="lang-content" data-lang="en">View all 12 withdraws →</span>
+            </div>
+
+            <!-- Saved payout settings (compact) -->
+            <div class="section-title" style="margin-top:20px">
+              ⚙️
+              <span class="lang-content active lc-inline" data-lang="vi">CÀI ĐẶT PAYOUT</span>
+              <span class="lang-content lc-inline" data-lang="ru">НАСТРОЙКИ ВЫПЛАТ</span>
+              <span class="lang-content lc-inline" data-lang="en">PAYOUT SETTINGS</span>
+            </div>
+            <div style="background:var(--tg-bg-secondary);border-radius:10px;padding:12px;font-size:12px;line-height:1.7">
+              <div style="display:flex;justify-content:space-between">
+                <span style="color:var(--tg-text-secondary)">
+                  <span class="lang-content active lc-inline" data-lang="vi">Default method</span>
+                  <span class="lang-content lc-inline" data-lang="ru">По умолчанию</span>
+                  <span class="lang-content lc-inline" data-lang="en">Default method</span>
+                </span>
+                <span style="font-weight:600">USDT TRC20</span>
+              </div>
+              <div style="display:flex;justify-content:space-between">
+                <span style="color:var(--tg-text-secondary)">Wallet</span>
+                <span style="font-family:monospace">T...x9k2vN8mR</span>
+              </div>
+              <div style="display:flex;justify-content:space-between">
+                <span style="color:var(--tg-text-secondary)">
+                  <span class="lang-content active lc-inline" data-lang="vi">Auto-payout</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Автовывод</span>
+                  <span class="lang-content lc-inline" data-lang="en">Auto-payout</span>
+                </span>
+                <span style="color:var(--success);font-weight:600">
+                  ✓ <span class="lang-content active lc-inline" data-lang="vi">Bật khi ≥$200</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Вкл при ≥$200</span>
+                  <span class="lang-content lc-inline" data-lang="en">On at ≥$200</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SHARE SCENARIO -->
+          <div class="scenario-content" data-scenario="share">
+            <div class="section-title">
+              🔗
+              <span class="lang-content active lc-inline" data-lang="vi">CHIA SẺ LINK GIỚI THIỆU</span>
+              <span class="lang-content lc-inline" data-lang="ru">ПОДЕЛИТЬСЯ РЕФ-ССЫЛКОЙ</span>
+              <span class="lang-content lc-inline" data-lang="en">SHARE REFERRAL LINK</span>
+            </div>
+
+            <!-- QR Mock -->
+            <div style="background:white;width:200px;height:200px;border-radius:16px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px">
+              <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:1px;width:160px;height:160px">
+                <!-- Random QR pattern simulation -->
+                <div style="background:black"></div><div></div><div style="background:black"></div><div style="background:black"></div><div></div><div style="background:black"></div><div></div><div style="background:black"></div>
+                <div></div><div style="background:black"></div><div></div><div style="background:black"></div><div style="background:black"></div><div></div><div style="background:black"></div><div></div>
+                <div style="background:black"></div><div></div><div style="background:black"></div><div></div><div></div><div style="background:black"></div><div></div><div style="background:black"></div>
+                <div style="background:black"></div><div style="background:black"></div><div></div><div style="background:black"></div><div style="background:black"></div><div></div><div style="background:black"></div><div></div>
+                <div></div><div style="background:black"></div><div style="background:black"></div><div></div><div></div><div style="background:black"></div><div></div><div style="background:black"></div>
+                <div style="background:black"></div><div></div><div></div><div style="background:black"></div><div style="background:black"></div><div></div><div style="background:black"></div><div style="background:black"></div>
+                <div></div><div style="background:black"></div><div style="background:black"></div><div></div><div style="background:black"></div><div></div><div></div><div style="background:black"></div>
+                <div style="background:black"></div><div></div><div style="background:black"></div><div style="background:black"></div><div></div><div style="background:black"></div><div style="background:black"></div><div></div>
+              </div>
+            </div>
+
+            <div class="ref-link-card">
+              <div class="link">https://t.me/funagency_bot?start=ref_605331591</div>
+              <div class="actions">
+                <button>📋
+                  <span class="lang-content active lc-inline" data-lang="vi">Copy</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Копир.</span>
+                  <span class="lang-content lc-inline" data-lang="en">Copy</span>
+                </button>
+                <button>📤
+                  <span class="lang-content active lc-inline" data-lang="vi">Share</span>
+                  <span class="lang-content lc-inline" data-lang="ru">Поделиться</span>
+                  <span class="lang-content lc-inline" data-lang="en">Share</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="section-title" style="margin-top:16px">
+              📝
+              <span class="lang-content active lc-inline" data-lang="vi">MẪU TIN NHẮN SẴN</span>
+              <span class="lang-content lc-inline" data-lang="ru">ГОТОВЫЕ ШАБЛОНЫ</span>
+              <span class="lang-content lc-inline" data-lang="en">READY TEMPLATES</span>
+            </div>
+
+            <!-- Template 1: Casual -->
+            <div class="template-card" onclick="copyTemplate(this)">
+              <span class="template-tag casual">💬 Casual</span>
+              <div class="template-text">
+                <span class="lang-content active" data-lang="vi">"Bro, biết FunAgency chưa? Acc FB rẻ nhất market 4-7%, replace 60s. Link: [...]"</span>
+                <span class="lang-content" data-lang="ru">"Знаешь FunAgency? FB акки от 4-7% — самые низкие. Replace 60с. [...]"</span>
+                <span class="lang-content" data-lang="en">"Know FunAgency? Lowest FB accounts 4-7%. 60s replace. [...]"</span>
+              </div>
+              <div class="template-actions">
+                <span class="template-uses">238 lượt dùng</span>
+                <button class="template-copy">📋 COPY</button>
+              </div>
+            </div>
+
+            <!-- Template 2: Numbers -->
+            <div class="template-card" onclick="copyTemplate(this)">
+              <span class="template-tag numbers">📊 Show numbers</span>
+              <div class="template-text">
+                <span class="lang-content active" data-lang="vi">"Tao tính nhanh cho mày: spend $50K/tháng × 4-7% = save $1,500-3,000/tháng vs FBM. FunAgency: [...]"</span>
+                <span class="lang-content" data-lang="ru">"Быстрый расчёт: $50K/мес × 4-7% = экономия $1,500-3K/мес vs FBM. FunAgency: [...]"</span>
+                <span class="lang-content" data-lang="en">"Quick math: $50K/mo × 4-7% = save $1,500-3K vs FBM. FunAgency: [...]"</span>
+              </div>
+              <div class="template-actions">
+                <span class="template-uses">412 lượt dùng ⭐</span>
+                <button class="template-copy">📋 COPY</button>
+              </div>
+            </div>
+
+            <!-- Template 3: Story -->
+            <div class="template-card" onclick="copyTemplate(this)">
+              <span class="template-tag story">📖 Story</span>
+              <div class="template-text">
+                <span class="lang-content active" data-lang="vi">"7 tháng dùng FunAgency, replace 60s mỗi lần ban, không 1 drama. Spend $200K không vấn đề. Recommend: [...]"</span>
+                <span class="lang-content" data-lang="ru">"7 месяцев в FunAgency — replace 60с, без драм. Спенд $200K без проблем. Рекомендую: [...]"</span>
+                <span class="lang-content" data-lang="en">"7 months on FunAgency — 60s replace, zero drama. Spent $200K no issues. Recommend: [...]"</span>
+              </div>
+              <div class="template-actions">
+                <span class="template-uses">189 lượt dùng</span>
+                <button class="template-copy">📋 COPY</button>
+              </div>
+            </div>
+
+            <!-- Template 4: Compare -->
+            <div class="template-card" onclick="copyTemplate(this)">
+              <span class="template-tag compare">⚔️ Compare</span>
+              <div class="template-text">
+                <span class="lang-content active" data-lang="vi">"FBM 7-9% vs FunAgency 4-7%. Cùng service, cùng replace, save 30-40% phí mỗi tháng. Switch giờ: [...]"</span>
+                <span class="lang-content" data-lang="ru">"FBM 7-9% vs FunAgency 4-7%. Тот же сервис, экономия 30-40% мес. Свич: [...]"</span>
+                <span class="lang-content" data-lang="en">"FBM 7-9% vs FunAgency 4-7%. Same service, save 30-40%/mo. Switch: [...]"</span>
+              </div>
+              <div class="template-actions">
+                <span class="template-uses">156 lượt dùng</span>
+                <button class="template-copy">📋 COPY</button>
+              </div>
+            </div>
+
+            <!-- Template 5: Urgency -->
+            <div class="template-card" onclick="copyTemplate(this)">
+              <span class="template-tag urgency">⚡ Urgency</span>
+              <div class="template-text">
+                <span class="lang-content active" data-lang="vi">"Đang ăn 7-9% vô ích — FunAgency 4-7% same quality. 1 tháng saved bằng 1 buyer pay-out. Đăng ký: [...]"</span>
+                <span class="lang-content" data-lang="ru">"Платишь 7-9% впустую — FunAgency 4-7%. Месяц экономии = зарплата байера. [...]"</span>
+                <span class="lang-content" data-lang="en">"Paying 7-9% wasted — FunAgency 4-7% same quality. 1 mo saved = 1 buyer salary. [...]"</span>
+              </div>
+              <div class="template-actions">
+                <span class="template-uses">94 lượt dùng</span>
+                <button class="template-copy">📋 COPY</button>
+              </div>
+            </div>
+
+            <!-- Template 6: Question -->
+            <div class="template-card" onclick="copyTemplate(this)">
+              <span class="template-tag question">❓ Question</span>
+              <div class="template-text">
+                <span class="lang-content active" data-lang="vi">"Hey, team mày có cần FB ad accounts không? Tao biết 1 chỗ rẻ + replace nhanh, share nếu hợp. [...]"</span>
+                <span class="lang-content" data-lang="ru">"Привет, твой team нужны FB acc? Знаю место с низкой ценой + replace, если интересно. [...]"</span>
+                <span class="lang-content" data-lang="en">"Hey, does your team need FB ad accounts? Know a cheap + fast replace one, if relevant. [...]"</span>
+              </div>
+              <div class="template-actions">
+                <span class="template-uses">203 lượt dùng</span>
+                <button class="template-copy">📋 COPY</button>
+              </div>
+            </div>
+
+            <!-- Template 7: Authority -->
+            <div class="template-card" onclick="copyTemplate(this)">
+              <span class="template-tag authority">🎓 Authority</span>
+              <div class="template-text">
+                <span class="lang-content active" data-lang="vi">"Sau khi test 4 agency (FBM, Adsbalance, etc.), FunAgency win về cost-quality. Detailed comparison: [...]"</span>
+                <span class="lang-content" data-lang="ru">"Тестил 4 агентства — FunAgency выигрывает по cost/quality. Детали: [...]"</span>
+                <span class="lang-content" data-lang="en">"Tested 4 agencies — FunAgency wins on cost-quality. Detailed comparison: [...]"</span>
+              </div>
+              <div class="template-actions">
+                <span class="template-uses">128 lượt dùng</span>
+                <button class="template-copy">📋 COPY</button>
+              </div>
+            </div>
+
+            <div style="text-align:center;margin-top:14px;font-size:11px;color:var(--tg-text-hint)">
+              <span class="lang-content active" data-lang="vi">📌 Tap card để copy · ⭐ template hot tháng này</span>
+              <span class="lang-content" data-lang="ru">📌 Тап для копии · ⭐ топ месяца</span>
+              <span class="lang-content" data-lang="en">📌 Tap to copy · ⭐ top of month</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Nav -->
+        <div class="bottom-nav">
+          <div class="nav-item active" data-nav="home">
+            <div class="icon">🏠</div>
+            <div class="label">
+              <span class="lang-content active" data-lang="vi">Home</span>
+              <span class="lang-content" data-lang="ru">Главная</span>
+              <span class="lang-content" data-lang="en">Home</span>
+            </div>
+          </div>
+          <div class="nav-item" data-nav="network">
+            <div class="icon">🌐</div>
+            <div class="label">
+              <span class="lang-content active" data-lang="vi">Mạng</span>
+              <span class="lang-content" data-lang="ru">Сеть</span>
+              <span class="lang-content" data-lang="en">Network</span>
+            </div>
+          </div>
+          <div class="nav-item" data-nav="stats">
+            <div class="icon">📊</div>
+            <div class="label">
+              <span class="lang-content active" data-lang="vi">Stats</span>
+              <span class="lang-content" data-lang="ru">Стат</span>
+              <span class="lang-content" data-lang="en">Stats</span>
+            </div>
+          </div>
+          <div class="nav-item" data-nav="wallet">
+            <div class="icon">💰</div>
+            <div class="label">
+              <span class="lang-content active" data-lang="vi">Ví</span>
+              <span class="lang-content" data-lang="ru">Кошель</span>
+              <span class="lang-content" data-lang="en">Wallet</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="margin-top:16px;text-align:center;color:var(--tg-text-hint);font-size:12px">
+      ↑ Click tabs ở header để chuyển scenario ↑
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL: Tech & Implementation -->
+  <div class="right-panel">
+    <div class="panel-title">🛠 MiniApp Tech</div>
+
+    <div class="design-note">
+      <span class="label">Telegram WebApp SDK</span>
+      <span class="why">Sử dụng <code>window.Telegram.WebApp</code><br>
+      ▸ <code>WebApp.MainButton</code> = TG-native CTA<br>
+      ▸ <code>WebApp.HapticFeedback</code> = vibrate<br>
+      ▸ <code>WebApp.themeParams</code> = auto theme</span>
+    </div>
+
+    <div class="design-note">
+      <span class="label">Hosting</span>
+      <span class="why">MiniApp = static site cần HTTPS:<br>
+      ▸ Cloudflare Pages (free + fast)<br>
+      ▸ Vercel (free tier)<br>
+      ▸ Netlify<br>
+      Đăng ký URL với @BotFather: <code>/newapp</code></span>
+    </div>
+
+    <div class="design-note">
+      <span class="label">Backend API</span>
+      <span class="why">MiniApp gọi backend cho data:<br>
+      <code>GET /api/stats?initData=...</code><br>
+      Validate <code>initData</code> bằng HMAC SHA256 với BOT_TOKEN.</span>
+    </div>
+
+    <div class="design-note">
+      <span class="label">Tech Stack đề xuất</span>
+      <span class="why">▸ <b>Frontend</b>: Vanilla JS / Vue 3 / React<br>
+      ▸ <b>Style</b>: Tailwind CSS<br>
+      ▸ <b>Charts</b>: Chart.js / ApexCharts<br>
+      ▸ <b>Backend</b>: Node.js + Express + Postgres<br>
+      ▸ <b>Auth</b>: Telegram initData HMAC</span>
+    </div>
+
+    <div class="design-note">
+      <span class="label">1-Tier Commission Logic</span>
+      <span class="why">Mỗi conversion → 1 commission record:<br>
+      ▸ direct_referrer_id ← user trực tiếp giới thiệu<br>
+      ▸ commission = client_spend × 1% (Growth) hoặc 1.5% (VIP)<br>
+      Đơn giản, không cascade, dễ tính, transparent.</span>
+    </div>
+
+    <div class="design-note">
+      <span class="label">Deep Link share</span>
+      <span class="why"><code>WebApp.openTelegramLink()</code> để share<br>
+      Pattern: <code>?startapp=ref_USERID</code><br>
+      Bot/MiniApp đều nhận args trong start.</span>
+    </div>
+
+    <div class="design-note">
+      <span class="label">DB Schema (essential)</span>
+      <span class="why">
+<code>users</code>: id, tg_id, referrer_id, tier, wallet<br>
+<code>clients</code>: id, referrer_id, spend_mo, status<br>
+<code>commissions</code>: client_id, recipient_id, amount, month<br>
+<code>payouts</code>: user_id, amount, tx_hash, status</span>
+    </div>
+
+    <div class="design-note">
+      <span class="label">Tier Thresholds</span>
+      <span class="why">
+▸ <b>Starter</b>: 0-2 active refs (default 0.5% lifetime)<br>
+▸ <b>Growth</b>: 3-9 active refs (1% lifetime)<br>
+▸ <b>VIP</b>: 10+ active refs (1.5% lifetime, +0.5%)
+</span>
+    </div>
+
+    <div class="design-note">
+      <span class="label">Push Notifications</span>
+      <span class="why">Bot sends:<br>
+      ▸ New conversion (instant)<br>
+      ▸ Tier upgrade<br>
+      ▸ Monthly commission summary<br>
+      ▸ Payout sent<br>
+      ▸ Inactive ref alert
+</span>
+    </div>
+
+    <div class="design-note">
+      <span class="label">Anti-fraud</span>
+      <span class="why">▸ Check referrer_id != self<br>
+      ▸ IP/device fingerprint<br>
+      ▸ Cooldown 7d before withdraw<br>
+      ▸ Manual review > $1K<br>
+      ▸ Claw-back chargeback proportional</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Only scenario tabs (exclude Settings button which uses .tab styling but opens modal)
+  const tabs = document.querySelectorAll('.tab[data-scenario]');
+  const langBtns = document.querySelectorAll('.lang-btn');
+  const navItems = document.querySelectorAll('.nav-item');
+  const scenarios = document.querySelectorAll('.scenario-content');
+  const langContents = document.querySelectorAll('.lang-content');
+  const designNotes = document.querySelectorAll('.design-note[data-show-on]');
+
+  let currentScenario = 'home';
+  let currentLang = 'vi';
+
+  function update() {
+    scenarios.forEach(s => {
+      s.classList.toggle('active', s.dataset.scenario === currentScenario);
+    });
+    langContents.forEach(l => {
+      l.classList.toggle('active', l.dataset.lang === currentLang);
+    });
+    tabs.forEach(t => {
+      t.classList.toggle('active', t.dataset.scenario === currentScenario);
+    });
+    langBtns.forEach(b => {
+      b.classList.toggle('active', b.dataset.lang === currentLang);
+    });
+    // Bottom nav sync (only for the 4 main tabs)
+    navItems.forEach(n => {
+      const isMain = ['home', 'network', 'stats', 'wallet'].includes(currentScenario);
+      n.classList.toggle('active', isMain && n.dataset.nav === currentScenario);
+    });
+
+    // Show contextual design notes
+    let anyMatch = false;
+    designNotes.forEach(n => {
+      const match = n.dataset.showOn === currentScenario;
+      n.style.display = match ? 'block' : 'none';
+      if (match) anyMatch = true;
+    });
+    if (!anyMatch) {
+      designNotes.forEach(n => n.style.display = 'block');
+    }
+    // Scroll to top
+    document.getElementById('contentArea').scrollTop = 0;
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => {
+    currentScenario = t.dataset.scenario;
+    update();
+  }));
+
+  navItems.forEach(n => n.addEventListener('click', () => {
+    currentScenario = n.dataset.nav;
+    update();
+  }));
+
+  langBtns.forEach(b => b.addEventListener('click', () => {
+    currentLang = b.dataset.lang;
+    document.documentElement.lang = currentLang;
+    update();
+  }));
+
+  update();
+
+  // === ANIMATED COUNTER (Notcoin/Hamster pattern) ===
+  function animateCounter(el, target, duration = 1500) {
+    const startTime = performance.now();
+    function tick() {
+      const elapsed = performance.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = '$' + Math.floor(target * eased).toLocaleString();
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function triggerHeroCounter() {
+    const el = document.getElementById('heroCounter');
+    if (el && currentScenario === 'home') {
+      animateCounter(el, parseInt(el.dataset.target, 10));
+    }
+  }
+
+  // Re-trigger on tab change
+  const tabs2 = document.querySelectorAll('.tab[data-scenario], .nav-item');
+  tabs2.forEach(t => t.addEventListener('click', () => setTimeout(triggerHeroCounter, 50)));
+  triggerHeroCounter();
+
+  // === NATIVE TG SHARE (TG WebApp pattern) ===
+  window.tgNativeShare = function() {
+    const text = "🎯 FunAgency — 1% lifetime ref · $300/$1,000 speed bonus";
+    const url = "https://t.me/funagency_bot?start=ref_605331591";
+    const tg = window.Telegram?.WebApp;
+    if (tg?.openTelegramLink) {
+      tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text));
+    } else {
+      navigator.clipboard?.writeText(text + '\n' + url);
+      alert('📤 TG Share triggered!\n\n(Demo mode — trong TG MiniApp thật sẽ mở native share sheet)\n\nLink đã copy clipboard.');
+    }
+    if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+  };
+
+  // === MODAL (Settings + FAQ) ===
+  window.openModal = function(id) {
+    document.getElementById(id)?.classList.add('show');
+    const tg = window.Telegram?.WebApp;
+    if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+  };
+  window.closeModal = function(id) {
+    document.getElementById(id)?.classList.remove('show');
+  };
+
+  // === COPY TEMPLATE (Share tab) ===
+  window.copyTemplate = function(card) {
+    const activeText = card.querySelector('.template-text .lang-content.active')?.textContent || '';
+    const refLink = 'https://t.me/funagency_bot?start=ref_605331591';
+    const final = activeText.replace('[...]', refLink);
+    navigator.clipboard?.writeText(final);
+    const tag = card.querySelector('.template-tag')?.textContent.trim();
+    const btn = card.querySelector('.template-copy');
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = '✓ COPIED';
+      btn.style.background = 'rgba(76,175,80,0.2)';
+      btn.style.color = 'var(--success)';
+      setTimeout(() => {
+        btn.textContent = orig;
+        btn.style.background = '';
+        btn.style.color = '';
+      }, 1500);
+    }
+    const tg = window.Telegram?.WebApp;
+    if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+  };
+
+  // === HAPTIC FEEDBACK on all interactive (TG Wallet pattern) ===
+  document.querySelectorAll('button, .action-card, .nav-item, .tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tg = window.Telegram?.WebApp;
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    });
+  });
+
+  // === STORY ONBOARDING (DOGS pattern) ===
+  let storyCurrentStep = 1;
+  const storyTotalSteps = 3;
+
+  function openStory() {
+    document.getElementById('storyOverlay').classList.add('show');
+    storyCurrentStep = 1;
+    showStoryStep(1);
+  }
+  function closeStory() {
+    document.getElementById('storyOverlay').classList.remove('show');
+  }
+  function showStoryStep(n) {
+    document.querySelectorAll('.story-step').forEach(s => {
+      s.classList.toggle('active', parseInt(s.dataset.step) === n);
+    });
+    document.querySelectorAll('.story-progress span').forEach((s, i) => {
+      s.classList.toggle('active', i < n);
+    });
+    // Update next button text on last step
+    const btn = document.getElementById('storyNextBtn');
+    if (n === storyTotalSteps) {
+      btn.querySelectorAll('.lang-content').forEach(s => {
+        s.textContent = s.dataset.lang === 'vi' ? '🚀 Bắt đầu!' : s.dataset.lang === 'ru' ? '🚀 Начать!' : '🚀 Start!';
+      });
+    } else {
+      btn.querySelectorAll('.lang-content').forEach(s => {
+        s.textContent = s.dataset.lang === 'vi' ? 'Tiếp →' : s.dataset.lang === 'ru' ? 'Далее →' : 'Next →';
+      });
+    }
+  }
+  function nextStoryStep() {
+    if (storyCurrentStep < storyTotalSteps) {
+      storyCurrentStep++;
+      showStoryStep(storyCurrentStep);
+    } else {
+      closeStory();
+      triggerConfetti(); // Celebrate finishing onboarding
+    }
+  }
+  window.openStory = openStory;
+  window.closeStory = closeStory;
+  window.nextStoryStep = nextStoryStep;
+
+  // Auto-open story on first load (mock — production: check user's first-time flag)
+  // Comment out below to disable auto-open
+  // setTimeout(openStory, 1000);
+
+  // === CONFETTI EFFECT (Catizen pattern) ===
+  function triggerConfetti() {
+    const container = document.getElementById('confetti');
+    container.innerHTML = '';
+    container.classList.add('show');
+    const colors = ['#f97316', '#fb923c', '#62b1eb', '#4caf50', '#f5a623', '#ff595a'];
+    for (let i = 0; i < 50; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + '%';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDelay = Math.random() * 0.5 + 's';
+      piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+      container.appendChild(piece);
+    }
+    setTimeout(() => container.classList.remove('show'), 4000);
+    // Haptic
+    const tg = window.Telegram?.WebApp;
+    if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+  }
+  window.triggerConfetti = triggerConfetti;
+
+  // Click any unlocked badge → confetti
+  document.querySelectorAll('.badge.unlocked').forEach(b => {
+    b.style.cursor = 'pointer';
+    b.addEventListener('click', triggerConfetti);
+  });
+
+  // === TIER UPGRADE CEREMONY (Hamster Kombat pattern) ===
+  function openCeremony() {
+    document.getElementById('ceremonyOverlay').classList.add('show');
+    triggerConfetti();
+    const tg = window.Telegram?.WebApp;
+    if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+  }
+  function closeCeremony() {
+    document.getElementById('ceremonyOverlay').classList.remove('show');
+  }
+  window.openCeremony = openCeremony;
+  window.closeCeremony = closeCeremony;
+
+  // Demo: trigger ceremony when user clicks tier progress bar
+  const tierProgress = document.querySelector('.tier-progress');
+  if (tierProgress) {
+    tierProgress.style.cursor = 'pointer';
+    tierProgress.title = 'Click for VIP ceremony demo';
+    tierProgress.addEventListener('click', openCeremony);
+  }
+
+  // === PUSH NOTIFICATION (Hamster pattern) ===
+  const pushMessages = {
+    vi: [
+      { icon: '💰', text: '@buyer_alpha vừa spend $5K → +$50 cho bạn!' },
+      { icon: '🎉', text: '@team_beta converted $600 → +$6 commission' },
+      { icon: '🔥', text: 'Network của bạn vượt $100K spend!' },
+      { icon: '🏆', text: 'Còn 4 hạng nữa để top 3 prize pool $1K!' }
+    ],
+    ru: [
+      { icon: '💰', text: '@buyer_alpha потратил $5K → +$50 тебе!' },
+      { icon: '🎉', text: '@team_beta конверсия $600 → +$6' },
+      { icon: '🔥', text: 'Сеть превысила $100K спенда!' },
+      { icon: '🏆', text: 'Ещё 4 места до топ-3 призового фонда!' }
+    ],
+    en: [
+      { icon: '💰', text: '@buyer_alpha spent $5K → +$50 for you!' },
+      { icon: '🎉', text: '@team_beta converted $600 → +$6 commission' },
+      { icon: '🔥', text: 'Your network crossed $100K spend!' },
+      { icon: '🏆', text: '4 ranks to top 3 prize pool $1K!' }
+    ]
+  };
+
+  function showPush(msg) {
+    const banner = document.getElementById('pushNotif');
+    const icon = banner.querySelector('.push-icon');
+    const text = document.getElementById('pushText');
+    icon.textContent = msg.icon;
+    text.textContent = msg.text;
+    banner.classList.add('show');
+    setTimeout(() => banner.classList.remove('show'), 5000);
+    const tg = window.Telegram?.WebApp;
+    if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
+  }
+  function closePush() {
+    document.getElementById('pushNotif').classList.remove('show');
+  }
+  window.closePush = closePush;
+
+  // Auto-cycle push notifications every 8 seconds
+  let pushIndex = 0;
+  function cyclePush() {
+    const list = pushMessages[currentLang] || pushMessages.vi;
+    showPush(list[pushIndex % list.length]);
+    pushIndex++;
+  }
+  // First push after 3s, then every 8s
+  setTimeout(() => {
+    cyclePush();
+    setInterval(cyclePush, 8000);
+  }, 3000);
+
+  // === STATE TOGGLE (Empty / Loading / Error demo) ===
+  const stateBtns = document.querySelectorAll('.state-btn');
+  const stateOverlay = document.getElementById('stateOverlay');
+  const stateViews = stateOverlay.querySelectorAll('.state-view');
+
+  // Per-scenario empty state customization
+  const emptyConfig = {
+    home:     { icon: '🌱', title: { vi: 'Chào người mới!', ru: 'Добро пожаловать!', en: 'Welcome aboard!' }, desc: { vi: 'Mời ref đầu tiên để bắt đầu kiếm 1% lifetime.', ru: 'Пригласи первого реферала, чтобы зарабатывать 1% лайфтайм.', en: 'Invite your first ref to start earning 1% lifetime.' } },
+    network:  { icon: '👥', title: { vi: 'Chưa có ref nào',  ru: 'Нет рефералов', en: 'No refs yet' },         desc: { vi: 'Network của bạn trống. Share link để mời người đầu tiên.', ru: 'Сеть пуста. Поделись ссылкой, чтобы пригласить первого.', en: 'Your network is empty. Share your link to invite the first ref.' } },
+    stats:    { icon: '📊', title: { vi: 'Chưa đủ data',     ru: 'Мало данных',   en: 'Not enough data' },     desc: { vi: 'Cần ít nhất 7 ngày data để vẽ chart. Tiếp tục mời ref.', ru: 'Нужно 7 дней данных. Продолжай приглашать.', en: 'Need 7+ days of data to render chart. Keep inviting.' } },
+    wallet:   { icon: '💸', title: { vi: 'Ví đang trống',    ru: 'Кошелёк пуст',  en: 'Empty wallet' },         desc: { vi: 'Chưa có giao dịch. Khi ref active spend, hoa hồng sẽ hiện ở đây.', ru: 'Транзакций нет. Появятся, когда рефы начнут тратить.', en: 'No transactions yet. Commissions appear when your refs start spending.' } },
+    withdraw: { icon: '🔒', title: { vi: 'Số dư < $20',      ru: 'Баланс < $20',  en: 'Balance below $20' },    desc: { vi: 'Cần tối thiểu $20 để rút. Hiện có $0 khả dụng.', ru: 'Минимум для вывода — $20. Доступно $0.', en: 'Minimum withdraw is $20. You have $0 available.' } },
+    share:    { icon: '🔗', title: { vi: 'Sẵn sàng share!',  ru: 'Готов делиться!', en: 'Ready to share!' },    desc: { vi: 'Link đã sẵn. Chọn QR / copy / native share để bắt đầu.', ru: 'Ссылка готова. Выбери QR / копирование / share.', en: 'Your link is ready. Pick QR / copy / native share to start.' } }
+  };
+
+  function applyEmptyConfig(scenario) {
+    const cfg = emptyConfig[scenario] || emptyConfig.home;
+    document.getElementById('emptyIcon').textContent = cfg.icon;
+    const titleSpans = document.querySelectorAll('#emptyTitle .lang-content');
+    const descSpans = document.querySelectorAll('#emptyDesc .lang-content');
+    titleSpans.forEach(s => { s.textContent = cfg.title[s.dataset.lang]; });
+    descSpans.forEach(s => { s.textContent = cfg.desc[s.dataset.lang]; });
+  }
+
+  function setState(state) {
+    stateBtns.forEach(b => b.classList.toggle('active', b.dataset.state === state));
+    if (state === 'normal') {
+      stateOverlay.classList.remove('show');
+      return;
+    }
+    applyEmptyConfig(currentScenario);
+    stateViews.forEach(v => { v.style.display = v.dataset.view === state ? 'flex' : 'none'; });
+    stateOverlay.classList.add('show');
+  }
+  window.setState = setState;
+  stateBtns.forEach(b => b.addEventListener('click', () => setState(b.dataset.state)));
+
+  // === TELEGRAM WebApp.themeParams AUTO THEME ===
+  // Reads themeParams from TG SDK and overrides our CSS vars.
+  // Falls back gracefully when running outside Telegram (current dark theme stays).
+  function applyTgTheme() {
+    const tg = window.Telegram?.WebApp;
+    if (!tg?.themeParams) return;
+    const tp = tg.themeParams;
+    const root = document.documentElement.style;
+    if (tp.bg_color)              root.setProperty('--tg-bg', tp.bg_color);
+    if (tp.secondary_bg_color)    root.setProperty('--tg-bg-secondary', tp.secondary_bg_color);
+    if (tp.section_bg_color)      root.setProperty('--tg-bg-tertiary', tp.section_bg_color);
+    if (tp.text_color)            root.setProperty('--tg-text', tp.text_color);
+    if (tp.hint_color)            root.setProperty('--tg-text-hint', tp.hint_color);
+    if (tp.subtitle_text_color)   root.setProperty('--tg-text-secondary', tp.subtitle_text_color);
+    if (tp.link_color)            root.setProperty('--tg-link', tp.link_color);
+    if (tp.button_color)          root.setProperty('--tg-button', tp.button_color);
+    if (tp.button_text_color)     root.setProperty('--tg-button-text', tp.button_text_color);
+    if (tp.destructive_text_color) root.setProperty('--tg-destructive', tp.destructive_text_color);
+    document.body.dataset.tgScheme = tg.colorScheme || 'dark';
+    tg.ready?.();
+    tg.expand?.();
+  }
+  applyTgTheme();
+  window.Telegram?.WebApp?.onEvent?.('themeChanged', applyTgTheme);
+
+  // === NETWORK FILTER + SEARCH + SORT + PAGINATION ===
+  const filterChips = document.querySelectorAll('#netFilterChips .filter-chip');
+  let currentFilter = 'all';
+  let sortMode = 'earnings_desc';
+  const sortLabels = {
+    earnings_desc: '↓ $ earnings',
+    earnings_asc:  '↑ $ earnings',
+    recent:        '🕒 Newest',
+    name:          'A → Z'
+  };
+
+  function getRefRows() {
+    return document.querySelectorAll('div[data-scenario="network"] .tree-node:not(.you)');
+  }
+
+  function classifyRef(row) {
+    if (row.style.opacity && parseFloat(row.style.opacity) < 1) return 'inactive';
+    return 'active';
+  }
+
+  function isNewRef(text) {
+    // "new" = joined within last 30d (mock: feb 2026 / mar 2026 / 02.2026 / 03.2026 / 2/2026 / 3/2026)
+    return /(feb|mar|02|03|2|3)[ ./]?202[56]/.test(text);
+  }
+
+  function filterNetwork() {
+    const q = (document.getElementById('netSearch').value || '').toLowerCase().trim();
+    let shown = 0, total = 0;
+    let topCounter = 0;
+    getRefRows().forEach(row => {
+      total++;
+      const status = classifyRef(row);
+      const text = row.textContent.toLowerCase();
+      let matchesFilter = false;
+      if (currentFilter === 'all') matchesFilter = true;
+      else if (currentFilter === 'active')   matchesFilter = (status === 'active');
+      else if (currentFilter === 'inactive') matchesFilter = (status === 'inactive');
+      else if (currentFilter === 'risk')     matchesFilter = (status === 'inactive');
+      else if (currentFilter === 'top') {
+        if (status === 'active' && topCounter < 3) { matchesFilter = true; topCounter++; }
+      }
+      else if (currentFilter === 'new')      matchesFilter = (status === 'active' && isNewRef(text));
+      const matchesSearch = !q || text.includes(q);
+      const visible = matchesFilter && matchesSearch;
+      row.style.display = visible ? '' : 'none';
+      if (visible) shown++;
+    });
+    const labelEl = document.getElementById('netResultCount');
+    if (labelEl) {
+      labelEl.querySelectorAll('.lang-content').forEach(s => {
+        const map = {
+          vi: `Hiển thị ${shown} / ${total} ref`,
+          ru: `Показано ${shown} / ${total}`,
+          en: `Showing ${shown} / ${total} refs`
+        };
+        s.textContent = map[s.dataset.lang];
+      });
+    }
+  }
+  window.filterNetwork = filterNetwork;
+  filterChips.forEach(c => c.addEventListener('click', () => {
+    filterChips.forEach(cc => cc.classList.toggle('active', cc === c));
+    currentFilter = c.dataset.filter;
+    filterNetwork();
+  }));
+
+  function cycleSort() {
+    const order = ['earnings_desc', 'earnings_asc', 'recent', 'name'];
+    sortMode = order[(order.indexOf(sortMode) + 1) % order.length];
+    document.getElementById('netSortLabel').textContent = sortLabels[sortMode];
+    // Demo: visual feedback only — production would re-sort the list
+    const tg = window.Telegram?.WebApp;
+    tg?.HapticFeedback?.impactOccurred?.('light');
+  }
+  window.cycleSort = cycleSort;
+
+  function loadMoreRefs() {
+    const btn = document.getElementById('loadMoreBtn');
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Loading…';
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = '✓ Demo: 20 more refs would load from API <code>/api/refs?page=2</code>';
+      btn.style.color = 'var(--success)';
+      btn.style.borderStyle = 'solid';
+    }, 900);
+  }
+  window.loadMoreRefs = loadMoreRefs;
+
+  // Reset state overlay when scenario changes (so dev sees the new screen, not stale state)
+  document.querySelectorAll('.tab[data-scenario]').forEach(t => t.addEventListener('click', () => setState('normal')));
+</script>
+
+</body>
+</html>
